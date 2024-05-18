@@ -82,7 +82,7 @@ public class JsonataTest {
 
                 if (t instanceof JException) {
                     JException je = (JException)t;
-                    System.out.println("--Exception     = "+je.error+"  --> "+je);
+                    System.out.println("--Exception     = "+je.getError()+"  --> "+je);
                 } else
                     System.out.println("--Exception     = "+t);
 

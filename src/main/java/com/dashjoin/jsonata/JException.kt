@@ -26,7 +26,7 @@ class JException(
      * Returns the error code, i.e. S0201
      * @return
      */
-    @JvmField var error: String,
+    var error: String,
     /**
      * Returns the error location (in characters)
      * @return

@@ -1999,131 +1999,36 @@ class Jsonata {
 
     interface JLambda
 
-    @FunctionalInterface
-    interface FnVarArgs<R> : JLambda, Function<List<*>?, R> {
-        val jFunctionCallable: JFunctionCallable
-            get() = object : JFunctionCallable {
-                override fun call(input: Any?, args: List<*>?): Any? {
-                    return apply(args)
-                }
-            }
-    }
+    fun interface FnVarArgs<R> : JLambda, Function<List<*>?, R>
 
-    @FunctionalInterface
-    interface Fn0<R> : JLambda, Supplier<R> {
-        val jFunctionCallable: JFunctionCallable
-            get() = object : JFunctionCallable {
-                override fun call(input: Any?, args: List<*>?): Any? {
-                    return get()
-                }
-            }
-    }
+    fun interface Fn0<R> : JLambda, Supplier<R>
 
-    @FunctionalInterface
-    interface Fn1<A, R> : JLambda, Function<A, R> {
-        val jFunctionCallable: JFunctionCallable
-            get() = object : JFunctionCallable {
-                override fun call(input: Any?, args: List<*>?): Any? {
-                    return apply(args!![0] as A)
-                }
-            }
-    }
+    fun interface Fn1<A, R> : JLambda, Function<A, R>
 
-    @FunctionalInterface
-    interface Fn2<A, B, R> : JLambda, BiFunction<A, B, R> {
-        val jFunctionCallable: JFunctionCallable
-            get() = object : JFunctionCallable {
-                override fun call(input: Any?, args: List<*>?): Any? {
-                    return apply(args!![0] as A, args!![1] as B)
-                }
-            }
-    }
+    fun interface Fn2<A, B, R> : JLambda, BiFunction<A, B, R>
 
-    @FunctionalInterface
-    interface Fn3<A, B, C, R> : JLambda {
+    fun interface Fn3<A, B, C, R> : JLambda {
         fun apply(a: A, b: B, c: C): R
-        val jFunctionCallable: JFunctionCallable
-            get() = object : JFunctionCallable {
-                override fun call(input: Any?, args: List<*>?): Any? {
-                    return apply(
-                        args!![0] as A, args!![1] as B,
-                        args!![2] as C
-                    )
-                }
-            }
     }
 
-    @FunctionalInterface
-    interface Fn4<A, B, C, D, R> : JLambda {
+    fun interface Fn4<A, B, C, D, R> : JLambda {
         fun apply(a: A, b: B, c: C, d: D): R
-        val jFunctionCallable: JFunctionCallable
-            get() = object : JFunctionCallable {
-                override fun call(input: Any?, args: List<*>?): Any? {
-                    return apply(
-                        args!![0] as A, args!![1] as B,
-                        args!![2] as C, args!![3] as D
-                    )
-                }
-            }
     }
 
-    @FunctionalInterface
-    interface Fn5<A, B, C, D, E, R> : JLambda {
+    fun interface Fn5<A, B, C, D, E, R> : JLambda {
         fun apply(a: A, b: B, c: C, d: D, e: E): R
-        val jFunctionCallable: JFunctionCallable
-            get() = object : JFunctionCallable {
-                override fun call(input: Any?, args: List<*>?): Any? {
-                    return apply(
-                        args!![0] as A, args!![1] as B,
-                        args!![2] as C, args!![3] as D, args!![4] as E
-                    )
-                }
-            }
     }
 
-    @FunctionalInterface
-    interface Fn6<A, B, C, D, E, F, R> : JLambda {
+    fun interface Fn6<A, B, C, D, E, F, R> : JLambda {
         fun apply(a: A, b: B, c: C, d: D, e: E, f: F): R
-        val jFunctionCallable: JFunctionCallable
-            get() = object : JFunctionCallable {
-                override fun call(input: Any?, args: List<*>?): Any? {
-                    return apply(
-                        args!![0] as A, args!![1] as B,
-                        args!![2] as C, args!![3] as D, args!![4] as E,
-                        args!![5] as F
-                    )
-                }
-            }
     }
 
-    @FunctionalInterface
-    interface Fn7<A, B, C, D, E, F, G, R> : JLambda {
+    fun interface Fn7<A, B, C, D, E, F, G, R> : JLambda {
         fun apply(a: A, b: B, c: C, d: D, e: E, f: F, g: G): R
-        val jFunctionCallable: JFunctionCallable
-            get() = object : JFunctionCallable {
-                override fun call(input: Any?, args: List<*>?): Any? {
-                    return apply(
-                        args!![0] as A, args!![1] as B,
-                        args!![2] as C, args!![3] as D, args!![4] as E,
-                        args!![5] as F, args!![6] as G
-                    )
-                }
-            }
     }
 
-    @FunctionalInterface
-    interface Fn8<A, B, C, D, E, F, G, H, R> : JLambda {
+    fun interface Fn8<A, B, C, D, E, F, G, H, R> : JLambda {
         fun apply(a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H): R
-        val jFunctionCallable: JFunctionCallable
-            get() = object : JFunctionCallable {
-                override fun call(input: Any?, args: List<*>?): Any? {
-                    return apply(
-                        args!![0] as A, args!![1] as B,
-                        args!![2] as C, args!![3] as D, args!![4] as E,
-                        args!![5] as F, args!![6] as G, args!![7] as H
-                    )
-                }
-            }
     }
 
     /**
@@ -2343,15 +2248,15 @@ class Jsonata {
         environment.bind(name, implementation)
     }
 
-    fun <R> registerFunction(name: String, implementation: Fn0<R>?) {
+    fun <R> registerFunction(name: String, implementation: Fn0<R>) {
         environment.bind(name, implementation)
     }
 
-    fun <A, R> registerFunction(name: String, implementation: Fn1<A, R>?) {
+    fun <A, R> registerFunction(name: String, implementation: Fn1<A, R>) {
         environment.bind(name, implementation)
     }
 
-    fun <A, B, R> registerFunction(name: String, implementation: Fn2<A, B, R>?) {
+    fun <A, B, R> registerFunction(name: String, implementation: Fn2<A, B, R>) {
         environment.bind(name, implementation)
     }
 
@@ -2407,32 +2312,88 @@ class Jsonata {
             return JFunction(name, signature, clazz, instance, methodName)
         }
 
-        fun <A, B, R> function(name: String?, func: FnVarArgs<R>, signature: String?): JFunction {
-            return JFunction(func.jFunctionCallable, signature)
+        fun <R> function(name: String?, func: FnVarArgs<R>, signature: String?): JFunction {
+            return JFunction(toJFunctionCallable(func), signature)
+        }
+
+        fun <R> toJFunctionCallable(func: FnVarArgs<R>): JFunctionCallable {
+            return object : JFunctionCallable {
+                override fun call(input: Any?, args: List<*>?): Any? {
+                    return func.apply(args)
+                }
+            }
         }
 
         fun <A, R> function(name: String?, func: Fn0<R>, signature: String?): JFunction {
-            return JFunction(func.jFunctionCallable, signature)
+            return JFunction(toJFunctionCallable(func), signature)
         }
 
-        fun <A, B, R> function(name: String?, func: Fn1<A, R>, signature: String?): JFunction {
-            return JFunction(func.jFunctionCallable, signature)
+        fun <R> toJFunctionCallable(func: Fn0<R>): JFunctionCallable {
+            return object : JFunctionCallable {
+                override fun call(input: Any?, args: List<*>?): Any? {
+                    return func.get()
+                }
+            }
+        }
+
+        fun <A, R> function(name: String?, func: Fn1<A, R>, signature: String?): JFunction {
+            return JFunction(toJFunctionCallable(func), signature)
+        }
+
+        fun <A, R> toJFunctionCallable(func: Fn1<A, R>): JFunctionCallable {
+            return object : JFunctionCallable {
+                override fun call(input: Any?, args: List<*>?): Any? {
+                    return func.apply(args!![0] as A)
+                }
+            }
         }
 
         fun <A, B, R> function(name: String?, func: Fn2<A, B, R>, signature: String?): JFunction {
-            return JFunction(func.jFunctionCallable, signature)
+            return JFunction(toJFunctionCallable(func), signature)
+        }
+
+        fun <A, B, R> toJFunctionCallable(func: Fn2<A, B, R>): JFunctionCallable {
+            return object : JFunctionCallable {
+                override fun call(input: Any?, args: List<*>?): Any? {
+                    return func.apply(args!![0] as A, args!![1] as B)
+                }
+            }
         }
 
         fun <A, B, C, R> function(name: String?, func: Fn3<A, B, C, R>, signature: String?): JFunction {
-            return JFunction(func.jFunctionCallable, signature)
+            return JFunction(toJFunctionCallable(func), signature)
+        }
+
+        fun <A, B, C, R> toJFunctionCallable(func: Fn3<A, B, C, R>): JFunctionCallable {
+            return object : JFunctionCallable {
+                override fun call(input: Any?, args: List<*>?): Any? {
+                    return func.apply(args!![0] as A, args!![1] as B, args!![2] as C)
+                }
+            }
         }
 
         fun <A, B, C, D, R> function(name: String?, func: Fn4<A, B, C, D, R>, signature: String?): JFunction {
-            return JFunction(func.jFunctionCallable, signature)
+            return JFunction(toJFunctionCallable(func), signature)
+        }
+
+        fun <A, B, C, D, R> toJFunctionCallable(func: Fn4<A, B, C, D, R>): JFunctionCallable {
+            return object : JFunctionCallable {
+                override fun call(input: Any?, args: List<*>?): Any? {
+                    return func.apply(args!![0] as A, args!![1] as B, args!![2] as C, args!![3] as D)
+                }
+            }
         }
 
         fun <A, B, C, D, E, R> function(name: String?, func: Fn5<A, B, C, D, E, R>, signature: String?): JFunction {
-            return JFunction(func.jFunctionCallable, signature)
+            return JFunction(toJFunctionCallable(func), signature)
+        }
+
+        fun <A, B, C, D, E, R> toJFunctionCallable(func: Fn5<A, B, C, D, E, R>): JFunctionCallable {
+            return object : JFunctionCallable {
+                override fun call(input: Any?, args: List<*>?): Any? {
+                    return func.apply(args!![0] as A, args!![1] as B, args!![2] as C, args!![3] as D, args!![4] as E)
+                }
+            }
         }
 
         fun <A, B, C, D, E, F, R> function(
@@ -2440,7 +2401,19 @@ class Jsonata {
             func: Fn6<A, B, C, D, E, F, R>,
             signature: String?
         ): JFunction {
-            return JFunction(func.jFunctionCallable, signature)
+            return JFunction(toJFunctionCallable(func), signature)
+        }
+
+        fun <A, B, C, D, E, F, R> toJFunctionCallable(func: Fn6<A, B, C, D, E, F, R>): JFunctionCallable {
+            return object : JFunctionCallable {
+                override fun call(input: Any?, args: List<*>?): Any? {
+                    return func.apply(
+                        args!![0] as A, args!![1] as B,
+                        args!![2] as C, args!![3] as D, args!![4] as E,
+                        args!![5] as F
+                    )
+                }
+            }
         }
 
         fun <A, B, C, D, E, F, G, R> function(
@@ -2448,7 +2421,19 @@ class Jsonata {
             func: Fn7<A, B, C, D, E, F, G, R>,
             signature: String?
         ): JFunction {
-            return JFunction(func.jFunctionCallable, signature)
+            return JFunction(toJFunctionCallable(func), signature)
+        }
+
+        fun <A, B, C, D, E, F, G, R> toJFunctionCallable(func: Fn7<A, B, C, D, E, F, G, R>): JFunctionCallable {
+            return object : JFunctionCallable {
+                override fun call(input: Any?, args: List<*>?): Any? {
+                    return func.apply(
+                        args!![0] as A, args!![1] as B,
+                        args!![2] as C, args!![3] as D, args!![4] as E,
+                        args!![5] as F, args!![6] as G
+                    )
+                }
+            }
         }
 
         fun <A, B, C, D, E, F, G, H, R> function(
@@ -2456,7 +2441,19 @@ class Jsonata {
             func: Fn8<A, B, C, D, E, F, G, H, R>,
             signature: String?
         ): JFunction {
-            return JFunction(func.jFunctionCallable, signature)
+            return JFunction(toJFunctionCallable(func), signature)
+        }
+
+        fun <A, B, C, D, E, F, G, H, R> toJFunctionCallable(func: Fn8<A, B, C, D, E, F, G, H, R>): JFunctionCallable {
+            return object : JFunctionCallable {
+                override fun call(input: Any?, args: List<*>?): Any? {
+                    return func.apply(
+                        args!![0] as A, args!![1] as B,
+                        args!![2] as C, args!![3] as D, args!![4] as E,
+                        args!![5] as F, args!![6] as G, args!![7] as H
+                    )
+                }
+            }
         }
 
         // Function registration
