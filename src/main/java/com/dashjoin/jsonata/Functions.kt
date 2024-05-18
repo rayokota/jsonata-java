@@ -2199,17 +2199,6 @@ object Functions {
             callArgs = mutableListOf(allArgs)
         }
 
-        /*
-        System.out.println("**** method " + m)
-        for (i in callArgs.indices) {
-            if (callArgs[i] == null) {
-                System.out.println("**** arg " + i + " null");
-            } else {
-                System.out.println("**** arg " + i + " " + callArgs[i]!!.javaClass);
-            }
-        }
-        */
-
         try {
             var res = m.invoke(null, *callArgs.toTypedArray())
             if (res is Number) res = convertNumber(res)!!
