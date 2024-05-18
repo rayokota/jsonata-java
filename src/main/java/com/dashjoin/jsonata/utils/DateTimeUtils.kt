@@ -921,7 +921,7 @@ object DateTimeUtils : Serializable {
                 }
             }
 
-            if (components.size == 0) {
+            if (components.isEmpty()) {
                 // nothing specified
                 return null
             }

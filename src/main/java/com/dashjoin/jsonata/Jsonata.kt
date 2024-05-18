@@ -248,7 +248,7 @@ class Jsonata {
                 }
             }
 
-            if (!isTupleStream && (resultSequence == null || (resultSequence as List<*>).size == 0)) {
+            if (!isTupleStream && (resultSequence == null || (resultSequence as List<*>).isEmpty())) {
                 break
             }
 
@@ -612,15 +612,13 @@ class Jsonata {
             "[" -> {
                 // array constructor - evaluate each item
                 result = Utils.JList<Any>() // [];
-                var idx = 0
-                for (item in expr.expressions!!) {
+                for ((idx, item) in expr.expressions!!.withIndex()) {
                     environment!!.isParallelCall = idx > 0
                     val value = evaluate(item, input, environment)
                     if (value != null) {
                         if (("" + item.value) == "[") (result as MutableList<Any>?)!!.add(value)
                         else result = append(result, value)
                     }
-                    idx++
                 }
                 if (expr.consarray) {
                     if (result !is Utils.JList<*>) result = Utils.JList(result as List<*>?)
@@ -683,7 +681,7 @@ class Jsonata {
             // Java: need to handle List separately
             for (value in input) {
                 if ((value is List<*>)) {
-                    var v = flatten(value, null)
+                    val v = flatten(value, null)
                     results = append(results, v) as MutableList<Any?>
                 } else if (value is Map<*, *>) {
                     // Call recursively do decompose the map
@@ -1699,10 +1697,10 @@ class Jsonata {
                 if (proc is Fn0<*>) {
                     result = proc.get()
                 } else if (proc is Fn1<*, *>) {
-                    result = (proc as Fn1<Any?, Any?>).apply(if (_args!!.size <= 0) null else _args[0])
+                    result = (proc as Fn1<Any?, Any?>).apply(if (_args!!.isEmpty()) null else _args[0])
                 } else if (proc is Fn2<*, *, *>) {
                     result =
-                        (proc as Fn2<Any?, Any?, Any?>).apply(if (_args!!.size <= 0) null else _args[0], if (_args.size <= 1) null else _args[1])
+                        (proc as Fn2<Any?, Any?, Any?>).apply(if (_args!!.isEmpty()) null else _args[0], if (_args.size <= 1) null else _args[1])
                 }
             } else if (proc is Pattern) {
                 val _res: MutableList<Any> = ArrayList()
@@ -1860,8 +1858,7 @@ class Jsonata {
         // Note Uli: if no env, bind to default env so the native functions can be found
         val env = createFrame(if (proc!!.environment != null) proc.environment else this.environment)
         val unboundArgs = ArrayList<Parser.Symbol>()
-        var index = 0
-        for (param in proc.arguments!!) {
+        for ((index, param) in proc.arguments!!.withIndex()) {
 //         proc.arguments.forEach(Object (param, index) {
             val arg: Any? = if (index < args.size) args[index] else null
             if ((arg == null) || (arg is Parser.Symbol && (("operator" == arg.type) && "?" == arg.value))) {
@@ -1869,7 +1866,6 @@ class Jsonata {
             } else {
                 env.bind(param.value as String, arg)
             }
-            index++
         }
         val procedure = parser!!.Symbol()
         procedure._jsonata_lambda = true

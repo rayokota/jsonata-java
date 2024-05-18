@@ -101,7 +101,7 @@ object Utils {
     @JvmStatic
     fun checkUrl(str: String) {
         var isHigh = false
-        for (i in 0 until str.length) {
+        for (i in str.indices) {
             val wasHigh = isHigh
             isHigh = Character.isHighSurrogate(str[i])
             if (wasHigh && isHigh) throw JException("Malformed URL", i)

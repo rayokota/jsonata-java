@@ -439,7 +439,7 @@ class JsonParser(handler: JsonHandler<*, *>?) {
         val start = captureStart
         val end = index - 1
         captureStart = -1
-        if (captureBuffer!!.length > 0) {
+        if (captureBuffer!!.isNotEmpty()) {
             captureBuffer!!.append(buffer, start, end - start)
             val captured = captureBuffer.toString()
             captureBuffer!!.setLength(0)
@@ -470,10 +470,10 @@ class JsonParser(handler: JsonHandler<*, *>?) {
         get() = current == ' ' || current == '\t' || current == '\n' || current == '\r'
 
     private val isDigit: Boolean
-        get() = current != null && (current!! >= '0' && current!! <= '9')
+        get() = current != null && (current!! in '0'..'9')
 
     private val isHexDigit: Boolean
-        get() = current != null && (current!! >= '0' && current!! <= '9' || current!! >= 'a' && current!! <= '\u000C' || current!! >= 'A' && current!! <= 'F')
+        get() = current != null && (current!! in '0'..'9' || current!! in 'a'..'f' || current!! in 'A'..'F')
 
     private val isEndOfText: Boolean
         get() = current == null

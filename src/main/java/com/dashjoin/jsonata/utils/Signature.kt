@@ -309,7 +309,7 @@ class Signature(signature: String, var functionName: String) : Serializable {
                 } else {
                     // may have matched multiple args (if the regex ends with a '+'
                     // split into single tokens
-                    val singles = match.split("".toRegex()).filter { !it.isEmpty() }.toTypedArray()
+                    val singles = match.split("".toRegex()).filter { it.isNotEmpty() }.toTypedArray()
                     for (single in singles) {
                         //match.split('').forEach(function (single) {
                         if (param.type == "a") {
@@ -325,7 +325,7 @@ class Signature(signature: String, var functionName: String) : Serializable {
                                         arrayOK = false
                                     } else if (single == "a") {
                                         val argArr = arg as List<*>?
-                                        if (argArr!!.size > 0) {
+                                        if (argArr!!.isNotEmpty()) {
                                             val itemType = getSymbol(argArr[0])
                                             if (itemType != "" + param.subtype!![0]) { // TODO recurse further
                                                 arrayOK = false

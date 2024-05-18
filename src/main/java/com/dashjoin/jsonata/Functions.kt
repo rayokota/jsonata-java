@@ -96,7 +96,7 @@ object Functions {
     @JvmStatic
     fun max(args: List<Number>?): Number? {
         // undefined inputs always return undefined
-        if (args == null || args.size == 0) {
+        if (args == null || args.isEmpty()) {
             return null
         }
 
@@ -113,7 +113,7 @@ object Functions {
     @JvmStatic
     fun min(args: List<Number>?): Number? {
         // undefined inputs always return undefined
-        if (args == null || args.size == 0) {
+        if (args == null || args.isEmpty()) {
             return null
         }
 
@@ -130,7 +130,7 @@ object Functions {
     @JvmStatic
     fun average(args: List<Number>?): Number? {
         // undefined inputs always return undefined
-        if (args == null || args.size == 0) {
+        if (args == null || args.isEmpty()) {
             return null
         }
 
@@ -228,7 +228,7 @@ object Functions {
                 b.append(',')
                 if (prettify) b.append('\n')
             }
-            if (!(arg as Map<*, *>).isEmpty()) b.deleteCharAt(b.length - (if (prettify) 2 else 1))
+            if ((arg as Map<*, *>).isNotEmpty()) b.deleteCharAt(b.length - (if (prettify) 2 else 1))
             if (prettify) b.append(indent)
             b.append('}')
             return
@@ -254,7 +254,7 @@ object Functions {
                 b.append(',')
                 if (prettify) b.append('\n')
             }
-            if (!arg.isEmpty()) b.deleteCharAt(b.length - (if (prettify) 2 else 1))
+            if (arg.isNotEmpty()) b.deleteCharAt(b.length - (if (prettify) 2 else 1))
             if (prettify) b.append(indent)
             b.append(']')
             return
@@ -565,7 +565,7 @@ object Functions {
             return null
         }
 
-        if (_char == null || _char.isEmpty()) {
+        if (_char.isNullOrEmpty()) {
             _char = " "
         }
 
@@ -684,7 +684,7 @@ object Functions {
             //if (dbg) System.out.println("match = "+matches);
             //result = (typeof matches !== 'undefined');
             //throw new Error("regexp not impl"); //result = false;
-            result = !matches.isEmpty()
+            result = matches.isNotEmpty()
         } else {
             throw Error("unknown type to match: $token")
         }
@@ -891,10 +891,10 @@ object Functions {
         } else {
             if (limit < 0) throw JException("Fourth argument of replace function must evaluate to a positive number", 0)
 
-            for (i in 0 until limit) if (pattern is String) {
-                str = str.replaceFirst(pattern.toRegex(), (replacement as String))
+            for (i in 0 until limit) str = if (pattern is String) {
+                str.replaceFirst(pattern.toRegex(), (replacement as String))
             } else {
-                str = safeReplaceFirst(str, pattern as Pattern, replacement as String)!!
+                safeReplaceFirst(str, pattern as Pattern, replacement as String)!!
             }
             return str
         }
@@ -1209,7 +1209,7 @@ object Functions {
         //if (valueNode != null && valueNode.isTextual()) {
         // Read the value
         //String value = valueNode.textValue();
-        if (value != null && !value.isEmpty()) {
+        if (!value.isNullOrEmpty()) {
             // If the target property requires a single char, check the length
 
             formattingChar = if (isChar) {
@@ -1465,7 +1465,7 @@ object Functions {
                 result = true
             }
         } else if (arg is Map<*, *>) {
-            if (!arg.isEmpty()) result = true
+            if (arg.isNotEmpty()) result = true
         } else if (arg is Boolean) {
             result = arg
         }
@@ -1699,7 +1699,7 @@ object Functions {
         }
 
         var index: Int
-        if (init == null && sequence.size > 0) {
+        if (init == null && sequence.isNotEmpty()) {
             result = sequence[0]
             index = 1
         } else {
@@ -2257,7 +2257,7 @@ object Functions {
     // Adapted from: org.apache.commons.lang3.StringUtils
     @JvmStatic
     fun isNumeric(cs: CharSequence?): Boolean {
-        if (cs == null || cs.length == 0) {
+        if (cs == null || cs.isEmpty()) {
             return false
         }
         val sz = cs.length
