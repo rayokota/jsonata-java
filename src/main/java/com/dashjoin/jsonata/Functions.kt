@@ -171,7 +171,7 @@ object Functions {
         //   return null;
 
         if (arg == null || arg === Jsonata.NULL_VALUE) {
-            b?.append("null")
+            b.append("null")
             return
         }
 
@@ -191,73 +191,73 @@ object Functions {
             if (res.indexOf("E+") > 0) res = res.replace("E+", "e+")
             if (res.indexOf("E-") > 0) res = res.replace("E-", "e-")
 
-            b?.append(res)
+            b.append(res)
             return
         }
 
         if (arg is Number || arg is Boolean) {
-            b?.append(arg)
+            b.append(arg)
             return
         }
 
         if (arg is String) {
             // quotes within strings must be escaped
-            quote((arg as String?)!!, b!!)
+            quote((arg as String?)!!, b)
             return
         }
 
         if (arg is Map<*, *>) {
-            b?.append('{')
-            if (prettify == true) b?.append('\n')
+            b.append('{')
+            if (prettify == true) b.append('\n')
             for ((key, v) in (arg as Map<String?, Any>)) {
                 if (prettify == true) {
-                    b?.append(indent)
-                    b?.append("  ")
+                    b.append(indent)
+                    b.append("  ")
                 }
-                b?.append('"')
-                b?.append(key)
-                b?.append('"')
-                b?.append(':')
-                if (prettify == true) b?.append(' ')
+                b.append('"')
+                b.append(key)
+                b.append('"')
+                b.append(':')
+                if (prettify == true) b.append(' ')
                 if (v is String || v is Parser.Symbol
                     || v is JFunction
                 ) {
-                    b?.append('"')
+                    b.append('"')
                     string(b, v, prettify, "$indent  ")
-                    b?.append('"')
+                    b.append('"')
                 } else string(b, v, prettify, "$indent  ")
-                b?.append(',')
-                if (prettify == true) b?.append('\n')
+                b.append(',')
+                if (prettify == true) b.append('\n')
             }
-            if (!(arg as Map<*, *>).isEmpty()) b?.deleteCharAt(b.length - (if (prettify == true) 2 else 1))
-            if (prettify == true) b?.append(indent)
-            b?.append('}')
+            if (!(arg as Map<*, *>).isEmpty()) b.deleteCharAt(b.length - (if (prettify == true) 2 else 1))
+            if (prettify == true) b.append(indent)
+            b.append('}')
             return
         }
 
         if ((arg is List<*>)) {
             if (arg.isEmpty()) {
-                b?.append("[]")
+                b.append("[]")
                 return
             }
-            b?.append('[')
-            if (prettify == true) b?.append('\n')
+            b.append('[')
+            if (prettify == true) b.append('\n')
             for (v in arg) {
                 if (prettify == true) {
-                    b?.append(indent)
-                    b?.append("  ")
+                    b.append(indent)
+                    b.append("  ")
                 }
                 if (v is String || v is Parser.Symbol || v is JFunction) {
-                    b?.append('"')
+                    b.append('"')
                     string(b, v, prettify, "$indent  ")
-                    b?.append('"')
+                    b.append('"')
                 } else string(b, v, prettify, "$indent  ")
-                b?.append(',')
-                if (prettify == true) b?.append('\n')
+                b.append(',')
+                if (prettify == true) b.append('\n')
             }
-            if (!arg.isEmpty()) b?.deleteCharAt(b.length - (if (prettify == true) 2 else 1))
-            if (prettify == true) b?.append(indent)
-            b?.append(']')
+            if (!arg.isEmpty()) b.deleteCharAt(b.length - (if (prettify == true) 2 else 1))
+            if (prettify == true) b.append(indent)
+            b.append(']')
             return
         }
 
@@ -759,7 +759,7 @@ object Functions {
         // In order to replace a simple $ in Java you have to escape the $ with "\$"
         // in JSONata you do this with a '$$'
         // "\$" followed any character besides '<' and and digit into $ + this character  
-        return `in`!!.replace("\\$\\$".toRegex(), "\\\\\\$")
+        return `in`.replace("\\$\\$".toRegex(), "\\\\\\$")
             .replace("([^\\\\]|^)\\$([^0-9^<])".toRegex(), "$1\\\\\\$$2")
             .replace("\\$$".toRegex(), "\\\\\\$") // allow $ at end
     }
@@ -781,7 +781,7 @@ object Functions {
         var replacement = _replacement as String
 
         replacement = safeReplacement(replacement)
-        val m = pattern!!.matcher(s)
+        val m = pattern.matcher(s)
         var r: String? = null
         for (i in 0..9) {
             try {
@@ -810,7 +810,7 @@ object Functions {
      */
     private fun toJsonataMatch(mr: MatchResult): Map<*, *> {
         val obj: MutableMap<String, Any?> = LinkedHashMap<String, Any?>()
-        obj["match"] = mr!!.group()
+        obj["match"] = mr.group()
 
         val groups: MutableList<Any> = ArrayList<Any>()
         for (i in 0..mr.groupCount()) groups.add(mr.group(i))
@@ -828,7 +828,7 @@ object Functions {
      * @return
      */
     private fun safeReplaceAllFn(s: String?, pattern: Pattern, fn: Any?): String? {
-        val m = pattern!!.matcher(s)
+        val m = pattern.matcher(s)
         var r: String? = null
         r = m.replaceAll { t: MatchResult ->
             try {
@@ -854,7 +854,7 @@ object Functions {
     private fun safeReplaceFirst(s: String?, pattern: Pattern, replacement: String): String? {
         var replacement = replacement
         replacement = safeReplacement(replacement)
-        val m = pattern!!.matcher(s)
+        val m = pattern.matcher(s)
         var r: String? = null
         for (i in 0..9) {
             try {
@@ -870,7 +870,7 @@ object Functions {
                 // Adjust replacement to remove the non-existing group
                 val g = "" + msg[msg.length - 1]
 
-                replacement = replacement!!.replace("$$g", "")
+                replacement = replacement.replace("$$g", "")
             }
         }
         return r
@@ -1986,7 +1986,7 @@ object Functions {
             return arr
         }
 
-        val result: List<*> = ArrayList(arr)
+        val result: MutableList<*> = ArrayList(arr)
         Collections.shuffle(result)
         return result
     }

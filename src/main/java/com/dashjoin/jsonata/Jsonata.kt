@@ -264,7 +264,7 @@ class Jsonata {
             } else {
                 resultSequence = createSequence()
                 for (ii in tupleBindings!!.indices) {
-                    (resultSequence as MutableList<Any?>).add(tupleBindings[ii]["@"])
+                    resultSequence.add(tupleBindings[ii]["@"])
                 }
             }
         }
@@ -329,7 +329,7 @@ class Jsonata {
                 }
             }
             if (res != null) {
-                (result as MutableList<Any?>).add(res)
+                result.add(res)
             }
         }
 
@@ -401,7 +401,7 @@ class Jsonata {
                 (result as Utils.JList<*>).tupleStream = true
                 for (ss in sorted!!.indices) {
                     val tuple = java.util.Map.of(
-                        "@", sorted!![ss],
+                        "@", sorted[ss],
                         expr.index, ss
                     )
                     result.add(tuple)
@@ -422,7 +422,7 @@ class Jsonata {
                 .collect(Collectors.toList<Any>()) as List<Map<String, Any>>
         }
 
-        for (ee in tupleBindings!!.indices) {
+        for (ee in tupleBindings.indices) {
             stepEnv = createFrameFromTuple(environment, tupleBindings[ee])
             val _res =  /* await */evaluate(expr, tupleBindings[ee]["@"], stepEnv)
             // res is the binding sequence for the output tuple stream
@@ -675,7 +675,7 @@ class Jsonata {
                     value = flatten(value, null)
                     results = append(results, value) as MutableList<Any?>
                 } else {
-                    results!!.add(value)
+                    results.add(value)
                 }
             }
         } else if (input is List<*>) {
@@ -686,9 +686,9 @@ class Jsonata {
                     results = append(results, v) as MutableList<Any?>
                 } else if (value is Map<*, *>) {
                     // Call recursively do decompose the map
-                    results!!.addAll((evaluateWildcard(expr, value) as List<Any>?)!!)
+                    results.addAll((evaluateWildcard(expr, value) as List<Any>?)!!)
                 } else {
-                    results!!.add(value!!)
+                    results.add(value!!)
                 }
             }
         }
@@ -1614,23 +1614,23 @@ class Jsonata {
             // unpack it, evaluate its arguments, and apply the tail call
             val next =  /* await */evaluate(
                 result!!.body!!.procedure,
-                result!!.input,
-                result!!.environment
+                result.input,
+                result.environment
             )
-            if (result!!.body!!.procedure!!.type === "variable") {
+            if (result.body!!.procedure!!.type === "variable") {
                 if (next is Parser.Symbol) // Java: not if JFunction
                     next.token =
-                        result!!.body!!.procedure!!.value
+                        result.body!!.procedure!!.value
             }
             if (next is Parser.Symbol) // Java: not if JFunction
                 next.position =
-                    result!!.body!!.procedure!!.position
+                    result.body!!.procedure!!.position
             val evaluatedArgs = ArrayList<Any?>()
-            for (ii in result!!.body!!.arguments!!.indices) {
+            for (ii in result.body!!.arguments!!.indices) {
                 evaluatedArgs.add( /* await */evaluate(
-                    result!!.body!!.arguments!![ii],
-                    result!!.input,
-                    result!!.environment
+                    result.body!!.arguments!![ii],
+                    result.input,
+                    result.environment
                 )
                 )
             }
@@ -1705,7 +1705,7 @@ class Jsonata {
                 }
             } else if (proc is Pattern) {
                 val _res: MutableList<Any> = ArrayList<Any>()
-                for (s in (validatedArgs as List<String>)!!) {
+                for (s in (validatedArgs as List<String>)) {
                     //System.err.println("PAT "+proc+" input "+s);
                     if (proc.matcher(s).find()) {
                         //System.err.println("MATCH");
@@ -2350,7 +2350,7 @@ class Jsonata {
         fun <A, B, R> toJFunctionCallable(func: Fn2<A, B, R>): JFunctionCallable {
             return object : JFunctionCallable {
                 override fun call(input: Any?, args: List<*>?): Any? {
-                    return func.apply(args!![0] as A, args!![1] as B)
+                    return func.apply(args!![0] as A, args[1] as B)
                 }
             }
         }
@@ -2362,7 +2362,7 @@ class Jsonata {
         fun <A, B, C, R> toJFunctionCallable(func: Fn3<A, B, C, R>): JFunctionCallable {
             return object : JFunctionCallable {
                 override fun call(input: Any?, args: List<*>?): Any? {
-                    return func.apply(args!![0] as A, args!![1] as B, args!![2] as C)
+                    return func.apply(args!![0] as A, args[1] as B, args[2] as C)
                 }
             }
         }
@@ -2374,7 +2374,7 @@ class Jsonata {
         fun <A, B, C, D, R> toJFunctionCallable(func: Fn4<A, B, C, D, R>): JFunctionCallable {
             return object : JFunctionCallable {
                 override fun call(input: Any?, args: List<*>?): Any? {
-                    return func.apply(args!![0] as A, args!![1] as B, args!![2] as C, args!![3] as D)
+                    return func.apply(args!![0] as A, args[1] as B, args[2] as C, args[3] as D)
                 }
             }
         }
@@ -2386,7 +2386,7 @@ class Jsonata {
         fun <A, B, C, D, E, R> toJFunctionCallable(func: Fn5<A, B, C, D, E, R>): JFunctionCallable {
             return object : JFunctionCallable {
                 override fun call(input: Any?, args: List<*>?): Any? {
-                    return func.apply(args!![0] as A, args!![1] as B, args!![2] as C, args!![3] as D, args!![4] as E)
+                    return func.apply(args!![0] as A, args[1] as B, args[2] as C, args[3] as D, args[4] as E)
                 }
             }
         }
@@ -2403,9 +2403,9 @@ class Jsonata {
             return object : JFunctionCallable {
                 override fun call(input: Any?, args: List<*>?): Any? {
                     return func.apply(
-                        args!![0] as A, args!![1] as B,
-                        args!![2] as C, args!![3] as D, args!![4] as E,
-                        args!![5] as F
+                        args!![0] as A, args[1] as B,
+                        args[2] as C, args[3] as D, args[4] as E,
+                        args[5] as F
                     )
                 }
             }
@@ -2423,9 +2423,9 @@ class Jsonata {
             return object : JFunctionCallable {
                 override fun call(input: Any?, args: List<*>?): Any? {
                     return func.apply(
-                        args!![0] as A, args!![1] as B,
-                        args!![2] as C, args!![3] as D, args!![4] as E,
-                        args!![5] as F, args!![6] as G
+                        args!![0] as A, args[1] as B,
+                        args[2] as C, args[3] as D, args[4] as E,
+                        args[5] as F, args[6] as G
                     )
                 }
             }
@@ -2443,9 +2443,9 @@ class Jsonata {
             return object : JFunctionCallable {
                 override fun call(input: Any?, args: List<*>?): Any? {
                     return func.apply(
-                        args!![0] as A, args!![1] as B,
-                        args!![2] as C, args!![3] as D, args!![4] as E,
-                        args!![5] as F, args!![6] as G, args!![7] as H
+                        args!![0] as A, args[1] as B,
+                        args[2] as C, args[3] as D, args[4] as E,
+                        args[5] as F, args[6] as G, args[7] as H
                     )
                 }
             }

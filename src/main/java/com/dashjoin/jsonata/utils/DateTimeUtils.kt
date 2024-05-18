@@ -493,7 +493,7 @@ object DateTimeUtils : Serializable {
                 var optionalDigits = 0
                 val groupingSeparators = Vector<GroupingSeparator?>()
                 var separatorPosition = 0
-                val formatCodepoints = primaryFormat!!.toCharArray()
+                val formatCodepoints = primaryFormat.toCharArray()
                 //ArrayUtils.reverse(formatCodepoints);
                 var ix = formatCodepoints.size - 1
                 while (ix >= 0) {

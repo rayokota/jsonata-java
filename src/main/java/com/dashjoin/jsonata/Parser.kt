@@ -806,20 +806,20 @@ class Parser {
         var slot = slot
         when (node.type) {
             "name", "wildcard" -> {
-                slot!!.level--
+                slot.level--
                 if (slot.level == 0) {
                     if (node.ancestor == null) {
                         node.ancestor = slot
                     } else {
                         // reuse the existing label
-                        ancestry[slot.index as Int]!!.slot!!.label = node.ancestor!!.label
+                        ancestry[slot.index as Int].slot!!.label = node.ancestor!!.label
                         node.ancestor = slot
                     }
                     node.tuple = true
                 }
             }
 
-            "parent" -> slot!!.level++
+            "parent" -> slot.level++
             "block" ->                 // look in last expression in the block
                 if (node.expressions!!.size > 0) {
                     node.tuple = true
@@ -831,7 +831,7 @@ class Parser {
                 node.tuple = true
                 var index = node.steps!!.size - 1
                 slot = seekParent(node.steps!![index--], slot)
-                while (slot!!.level > 0 && index >= 0) {
+                while (slot.level > 0 && index >= 0) {
                     // check previous steps
                     slot = seekParent(node.steps!![index--], slot)
                 }
@@ -919,27 +919,27 @@ class Parser {
                             //result = {type: 'path', steps: [lstep]};
                         }
                         if (lstep.type == "parent") {
-                            result!!.seekingParent = ArrayList(
+                            result.seekingParent = ArrayList(
                                 Arrays.asList(
                                     lstep.slot
                                 )
                             )
                         }
                         val rest = processAST(expr.rhs)
-                        if (rest!!.type == "function" && rest.procedure!!.type == "path" && rest.procedure!!.steps!!.size == 1 && rest.procedure!!.steps!![0].type == "name" && result!!.steps!![result.steps!!.size - 1].type == "function") {
+                        if (rest!!.type == "function" && rest.procedure!!.type == "path" && rest.procedure!!.steps!!.size == 1 && rest.procedure!!.steps!![0].type == "name" && result.steps!![result.steps!!.size - 1].type == "function") {
                             // next function in chain of functions - will override a thenable
                             result.steps!![result.steps!!.size - 1].nextFunction =
                                 rest.procedure!!.steps!![0].value as Symbol?
                         }
                         if (rest.type == "path") {
-                            result!!.steps!!.addAll(rest.steps!!)
+                            result.steps!!.addAll(rest.steps!!)
                         } else {
                             if (rest.predicate != null) {
                                 rest.stages = rest.predicate
                                 rest.predicate = null
                                 //delete rest.predicate;
                             }
-                            result!!.steps!!.add(rest)
+                            result.steps!!.add(rest)
                         }
                         // any steps within a path that are string literals, should be changed to 'name'
                         for (step in result.steps!!) {
@@ -1084,7 +1084,7 @@ class Parser {
 
                     ":=" -> {
                         result = Symbol()
-                        result!!.type = "bind"
+                        result.type = "bind"
                         result.value = expr.value
                         result.position = expr.position
                         result.lhs = processAST(expr.lhs)
@@ -1132,8 +1132,8 @@ class Parser {
                             _res.steps!!.add(result)
                             result = _res
                             if (step!!.predicate != null) {
-                                step!!.stages = step.predicate
-                                step!!.predicate = null
+                                step.stages = step.predicate
+                                step.predicate = null
                             }
                         }
                         if (step.stages == null) {
@@ -1150,7 +1150,7 @@ class Parser {
 
                     "~>" -> {
                         result = Symbol()
-                        result!!.type = "apply"
+                        result.type = "apply"
                         result.value = expr.value
                         result.position = expr.position
                         result.lhs = processAST(expr.lhs)
@@ -1173,7 +1173,7 @@ class Parser {
 
             "unary" -> {
                 result = Symbol()
-                result!!.type = expr.type
+                result.type = expr.type
                 result.value = expr.value
                 result.position = expr.position
                 // expr.value might be Character!
