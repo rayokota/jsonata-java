@@ -2197,6 +2197,7 @@ object Functions {
             callArgs = java.util.List.of(allArgs)
         }
 
+        /*
         System.out.println("**** method " + m)
         for (i in callArgs.indices) {
             if (callArgs[i] == null) {
@@ -2205,6 +2206,7 @@ object Functions {
                 System.out.println("**** arg " + i + " " + callArgs[i]!!.javaClass);
             }
         }
+        */
 
         try {
             var res = m.invoke(null, *callArgs.toTypedArray())
