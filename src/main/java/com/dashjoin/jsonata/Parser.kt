@@ -40,15 +40,15 @@ class Parser {
     // This parser implements the 'Top down operator precedence' algorithm developed by Vaughan R Pratt; http://dl.acm.org/citation.cfm?id=512931.
     // and builds on the Javascript framework described by Douglas Crockford at http://javascript.crockford.com/tdop/tdop.html
     // and in 'Beautiful Code', edited by Andy Oram and Greg Wilson, Copyright 2007 O'Reilly Media, Inc. 798-0-596-51004-6
-    var source: String? = null
-    var recover: Boolean = false
+    private var source: String? = null
+    private var recover: Boolean = false
 
     //var parser = function (source, recover) {
-    var node: Symbol? = null
-    var lexer: Tokenizer? = null
+    private var node: Symbol? = null
+    private var lexer: Tokenizer? = null
 
-    var symbolTable: HashMap<String, Symbol> = HashMap()
-    var errors: MutableList<Exception> = ArrayList()
+    private var symbolTable: HashMap<String, Symbol> = HashMap()
+    private var errors: MutableList<Exception> = ArrayList()
 
     fun remainingTokens(): List<Tokenizer.Token> {
         val remaining: MutableList<Tokenizer.Token> = ArrayList()

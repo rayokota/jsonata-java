@@ -133,7 +133,7 @@ class Jsonata {
         return perThreadInstance._evaluate(expr, input, environment)
     }
 
-    fun _evaluate(expr: Parser.Symbol?, input: Any?, environment: Frame?): Any? {
+    private fun _evaluate(expr: Parser.Symbol?, input: Any?, environment: Frame?): Any? {
         var result: Any? = null
 
         // Store the current input
@@ -211,7 +211,7 @@ class Jsonata {
      * @returns {*} Evaluated input data
      */
     /* async */
-    fun evaluatePath(expr: Parser.Symbol?, input: Any?, environment: Frame?): Any? {
+    private fun evaluatePath(expr: Parser.Symbol?, input: Any?, environment: Frame?): Any? {
         var inputSequence: List<*>?
         // expr is an array of steps
         // if the first step is a variable reference ($...), including root reference ($$),
@@ -289,7 +289,7 @@ class Jsonata {
         return resultSequence
     }
 
-    fun createFrameFromTuple(environment: Frame?, tuple: Map<String, Any>?): Frame {
+    private fun createFrameFromTuple(environment: Frame?, tuple: Map<String, Any>?): Frame {
         val frame = createFrame(environment)
         if (tuple != null) for (prop in tuple.keys) {
             frame.bind(prop, tuple[prop]!!)
@@ -306,7 +306,7 @@ class Jsonata {
      * @returns {*} Evaluated input data
      */
     /* async */
-    fun evaluateStep(expr: Parser.Symbol, input: Any?, environment: Frame?, lastStep: Boolean): Any? {
+    private fun evaluateStep(expr: Parser.Symbol, input: Any?, environment: Frame?, lastStep: Boolean): Any? {
         var result: Any?
         if (expr.type == "sort") {
             result =  /* await */evaluateSortExpression(expr, input, environment)
@@ -356,7 +356,7 @@ class Jsonata {
     }
 
     /* async */
-    fun evaluateStages(stages: List<Parser.Symbol>?, input: Any, environment: Frame?): Any {
+    private fun evaluateStages(stages: List<Parser.Symbol>?, input: Any, environment: Frame?): Any {
         var result = input
         for (ss in stages!!.indices) {
             val stage = stages[ss]
@@ -384,7 +384,7 @@ class Jsonata {
      * @returns {*} Evaluated input data
      */
     /* async */
-    fun evaluateTupleStep(
+    private fun evaluateTupleStep(
         expr: Parser.Symbol,
         input: List<*>?,
         tupleBindings: List<Map<String, Any>>?,
@@ -474,7 +474,7 @@ class Jsonata {
      * @returns {*} Result after applying predicates
      */
     /* async */
-    fun evaluateFilter(_predicate: Any?, input: Any?, environment: Frame?): Any {
+    private fun evaluateFilter(_predicate: Any?, input: Any?, environment: Frame?): Any {
         var input = input
         val predicate = _predicate as Parser.Symbol?
         var results = createSequence()
@@ -539,7 +539,7 @@ class Jsonata {
      * @returns {*} Evaluated input data
      */
     /* async */
-    fun evaluateBinary(_expr: Parser.Symbol?, input: Any?, environment: Frame?): Any? {
+    private fun evaluateBinary(_expr: Parser.Symbol?, input: Any?, environment: Frame?): Any? {
         val expr = _expr as Infix?
         var result: Any? = null
         val lhs =  /* await */evaluate(expr!!.lhs, input, environment)
@@ -588,7 +588,7 @@ class Jsonata {
      * @returns {*} Evaluated input data
      */
     /* async */
-    fun evaluateUnary(expr: Parser.Symbol?, input: Any?, environment: Frame?): Any? {
+    private fun evaluateUnary(expr: Parser.Symbol?, input: Any?, environment: Frame?): Any? {
         var result: Any? = null
 
         when ("" + expr!!.value) {
@@ -641,7 +641,7 @@ class Jsonata {
      * @param {Object} environment - Environment
      * @returns {*} Evaluated input data
      */
-    fun evaluateName(expr: Parser.Symbol?, input: Any?, environment: Frame?): Any? {
+    private fun evaluateName(expr: Parser.Symbol?, input: Any?, environment: Frame?): Any? {
         // lookup the "name" item in the input
         return lookup(input, expr!!.value as String?)
     }
@@ -651,7 +651,7 @@ class Jsonata {
      * @param {Object} expr - JSONata expression
      * @returns {*} Evaluated input data
      */
-    fun evaluateLiteral(expr: Parser.Symbol?): Any? {
+    private fun evaluateLiteral(expr: Parser.Symbol?): Any? {
         return if (expr!!.value != null) expr.value else NULL_VALUE
     }
 
@@ -661,7 +661,7 @@ class Jsonata {
      * @param {Object} input - Input data to evaluate against
      * @returns {*} Evaluated input data
      */
-    fun evaluateWildcard(expr: Parser.Symbol?, input: Any?): Any {
+    private fun evaluateWildcard(expr: Parser.Symbol?, input: Any?): Any {
         var input = input
         var results: MutableList<Any?> = createSequence()
         if ((input is Utils.JList<*>) && input.outerWrapper && (input.size > 0)) {
@@ -703,7 +703,7 @@ class Jsonata {
      * @param {Array} flattened - carries the flattened array - if not defined, will initialize to []
      * @returns {Array} - the flattened array
      */
-    fun flatten(arg: Any, flattened: MutableList<Any>?): Any {
+    private fun flatten(arg: Any, flattened: MutableList<Any>?): Any {
         var flattened = flattened
         if (flattened == null) {
             flattened = ArrayList()
@@ -724,7 +724,7 @@ class Jsonata {
      * @param {Object} input - Input data to evaluate against
      * @returns {*} Evaluated input data
      */
-    fun evaluateDescendants(expr: Parser.Symbol?, input: Any?): Any? {
+    private fun evaluateDescendants(expr: Parser.Symbol?, input: Any?): Any? {
         var result: Any? = null
         val resultSequence = createSequence()
         if (input != null) {
@@ -744,7 +744,7 @@ class Jsonata {
      * @param {Object} input - Input data
      * @param {Object} results - Results
      */
-    fun recurseDescendants(input: Any?, results: MutableList<Any?>) {
+    private fun recurseDescendants(input: Any?, results: MutableList<Any?>) {
         // this is the equivalent of //* in XPath
         if (input != null && input !is List<*>) {
             results.add(input)
@@ -768,7 +768,7 @@ class Jsonata {
      * @param {Object} op - opcode
      * @returns {*} Result
      */
-    fun evaluateNumericExpression(_lhs: Any?, _rhs: Any?, op: String?): Any? {
+    private fun evaluateNumericExpression(_lhs: Any?, _rhs: Any?, op: String?): Any? {
         var result = 0.0
 
         if (_lhs != null && !isNumeric(_lhs)) {
@@ -810,7 +810,7 @@ class Jsonata {
      * @param {Object} op - opcode
      * @returns {*} Result
      */
-    fun evaluateEqualityExpression(lhs: Any?, rhs: Any?, op: String?): Any? {
+    private fun evaluateEqualityExpression(lhs: Any?, rhs: Any?, op: String?): Any? {
         var lhs = lhs
         var rhs = rhs
         var result: Any? = null
@@ -844,7 +844,7 @@ class Jsonata {
      * @param {Object} op - opcode
      * @returns {*} Result
      */
-    fun evaluateComparisonExpression(lhs: Any?, rhs: Any?, op: String?): Any? {
+    private fun evaluateComparisonExpression(lhs: Any?, rhs: Any?, op: String?): Any? {
         var lhs = lhs
         var rhs = rhs
         var result: Any? = null
@@ -903,7 +903,7 @@ class Jsonata {
      * @param {Object} rhs - RHS value
      * @returns {boolean} - true if lhs is a member of rhs
      */
-    fun evaluateIncludesExpression(lhs: Any?, rhs: Any?): Any {
+    private fun evaluateIncludesExpression(lhs: Any?, rhs: Any?): Any {
         var rhs = rhs
         var result = false
 
@@ -955,7 +955,7 @@ class Jsonata {
      * @param {Object} rhs - RHS value
      * @returns {string|*} Concatenated string
      */
-    fun evaluateStringConcat(lhs: Any?, rhs: Any?): Any {
+    private fun evaluateStringConcat(lhs: Any?, rhs: Any?): Any {
         val result: String
 
         var lstr: String? = ""
@@ -981,7 +981,7 @@ class Jsonata {
      * @returns {{}} Evaluated input data
      */
     /* async */
-    fun evaluateGroupExpression(expr: Parser.Symbol?, _input: Any?, environment: Frame?): Any {
+    private fun evaluateGroupExpression(expr: Parser.Symbol?, _input: Any?, environment: Frame?): Any {
         var _input = _input
         val result = LinkedHashMap<Any, Any>()
         val groups = LinkedHashMap<Any, GroupEntry?>()
@@ -1064,7 +1064,7 @@ class Jsonata {
         return result
     }
 
-    fun reduceTupleStream(_tupleStream: Any?): Any? {
+    private fun reduceTupleStream(_tupleStream: Any?): Any? {
         if (_tupleStream !is List<*>) {
             return _tupleStream
         }
@@ -1093,7 +1093,7 @@ class Jsonata {
      * @param {Object} rhs - RHS value
      * @returns {Array} Resultant array
      */
-    fun evaluateRangeExpression(lhs: Any?, rhs: Any?): Any? {
+    private fun evaluateRangeExpression(lhs: Any?, rhs: Any?): Any? {
         val result: Any? = null
 
         if (lhs != null && (lhs !is Long && lhs !is Int)) {
@@ -1147,7 +1147,7 @@ class Jsonata {
      * @returns {*} Evaluated input data
      */
     /* async */
-    fun evaluateBindExpression(expr: Parser.Symbol?, input: Any?, environment: Frame?): Any? {
+    private fun evaluateBindExpression(expr: Parser.Symbol?, input: Any?, environment: Frame?): Any? {
         // The RHS is the expression to evaluate
         // The LHS is the name of the variable to bind to - should be a VARIABLE token (enforced by parser)
         val value =  /* await */evaluate(expr!!.rhs, input, environment)
@@ -1163,7 +1163,7 @@ class Jsonata {
      * @returns {*} Evaluated input data
      */
     /* async */
-    fun evaluateCondition(expr: Parser.Symbol?, input: Any?, environment: Frame?): Any? {
+    private fun evaluateCondition(expr: Parser.Symbol?, input: Any?, environment: Frame?): Any? {
         var result: Any? = null
         val condition =  /* await */evaluate(expr!!.condition, input, environment)
         if (boolize(condition)) {
@@ -1182,7 +1182,7 @@ class Jsonata {
      * @returns {*} Evaluated input data
      */
     /* async */
-    fun evaluateBlock(expr: Parser.Symbol?, input: Any?, environment: Frame?): Any? {
+    private fun evaluateBlock(expr: Parser.Symbol?, input: Any?, environment: Frame?): Any? {
         var result: Any? = null
         // create a new frame to limit the scope of variable assignments
         // TODO, only do this if the post-parse stage has flagged this as required
@@ -1201,7 +1201,7 @@ class Jsonata {
      * @param {Object} expr - expression containing regex
      * @returns {Function} Higher order Object representing prepared regex
      */
-    fun evaluateRegex(expr: Parser.Symbol?): Any? {
+    private fun evaluateRegex(expr: Parser.Symbol?): Any? {
         // Note: in Java we just use the compiled regex Pattern
         // The apply functions need to take care to evaluate
         return expr!!.value
@@ -1214,7 +1214,7 @@ class Jsonata {
      * @param {Object} environment - Environment
      * @returns {*} Evaluated input data
      */
-    fun evaluateVariable(expr: Parser.Symbol?, input: Any?, environment: Frame?): Any? {
+    private fun evaluateVariable(expr: Parser.Symbol?, input: Any?, environment: Frame?): Any? {
         // lookup the variable value in the environment
         var result: Any? = null
         // if the variable name is empty string, then it refers to context value
@@ -1236,7 +1236,7 @@ class Jsonata {
      * @returns {*} Ordered sequence
      */
     /* async */
-    fun evaluateSortExpression(expr: Parser.Symbol, input: Any?, environment: Frame?): Any? {
+    private fun evaluateSortExpression(expr: Parser.Symbol, input: Any?, environment: Frame?): Any? {
         val result: Any?
 
         // evaluate the lhs, then sort the results in order according to rhs expression
@@ -1354,7 +1354,7 @@ class Jsonata {
      * @param {Object} environment - Environment
      * @returns {*} tranformer function
      */
-    fun evaluateTransformExpression(expr: Parser.Symbol?, input: Any?, environment: Frame?): Any {
+    private fun evaluateTransformExpression(expr: Parser.Symbol?, input: Any?, environment: Frame?): Any {
         // create a Object to implement the transform definition
         val transformer: JFunctionCallable = object : JFunctionCallable {
             override fun call(input: Any?, args: List<*>?): Any? {
@@ -1438,7 +1438,7 @@ class Jsonata {
      * @returns {*} Evaluated input data
      */
     /* async */
-    fun evaluateApplyExpression(expr: Parser.Symbol?, input: Any?, environment: Frame?): Any? {
+    private fun evaluateApplyExpression(expr: Parser.Symbol?, input: Any?, environment: Frame?): Any? {
         var result: Any? = null
 
 
@@ -1483,11 +1483,11 @@ class Jsonata {
         return result
     }
 
-    fun isFunctionLike(o: Any?): Boolean {
+    private fun isFunctionLike(o: Any?): Boolean {
         return isFunction(o) || isLambda(o) || (o is Pattern)
     }
 
-    val perThreadInstance: Jsonata
+    private val perThreadInstance: Jsonata
         /**
          * Returns a per thread instance of this parsed expression.
          *
@@ -1516,7 +1516,7 @@ class Jsonata {
      * @returns {*} Evaluated input data
      */
     /* async */
-    fun evaluateFunction(expr: Parser.Symbol?, input: Any?, environment: Frame?, applytoContext: Any?): Any? {
+    private fun evaluateFunction(expr: Parser.Symbol?, input: Any?, environment: Frame?, applytoContext: Any?): Any? {
         var result: Any? = null
 
         // this.current is set by getPerThreadInstance() at this point
@@ -1649,7 +1649,7 @@ class Jsonata {
      * @returns {*} Result of procedure
      */
     /* async */
-    fun applyInner(proc: Any?, args: Any?, input: Any?, environment: Any?): Any? {
+    private fun applyInner(proc: Any?, args: Any?, input: Any?, environment: Any?): Any? {
         var result: Any? = null
         try {
             var validatedArgs = args
@@ -1738,7 +1738,7 @@ class Jsonata {
      * @param {Object} environment - Environment
      * @returns {{lambda: boolean, input: *, environment: *, arguments: *, body: *}} Evaluated input data
      */
-    fun evaluateLambda(expr: Parser.Symbol?, input: Any?, environment: Frame?): Any {
+    private fun evaluateLambda(expr: Parser.Symbol?, input: Any?, environment: Frame?): Any {
         // make a Object (closure)
         val procedure = parser!!.Symbol()
 
@@ -1766,7 +1766,7 @@ class Jsonata {
      * @returns {*} Evaluated input data
      */
     /* async */
-    fun evaluatePartialApplication(expr: Parser.Symbol?, input: Any?, environment: Frame?): Parser.Symbol {
+    private fun evaluatePartialApplication(expr: Parser.Symbol?, input: Any?, environment: Frame?): Parser.Symbol {
         // partially apply a function
         var result: Any? = null
         // evaluate the arguments
@@ -1812,7 +1812,7 @@ class Jsonata {
      * @param {*} context - context value
      * @returns {Array} - validated arguments
      */
-    fun validateArguments(signature: Any, args: Any?, context: Any?): Any? {
+    private fun validateArguments(signature: Any, args: Any?, context: Any?): Any? {
         var validatedArgs = args
         if (isFunction(signature)) {
             validatedArgs = (signature as JFunction).validate(args, context)
@@ -1830,7 +1830,7 @@ class Jsonata {
      * @returns {*} Result of procedure
      */
     /* async */
-    fun applyProcedure(_proc: Any?, _args: Any?): Any? {
+    private fun applyProcedure(_proc: Any?, _args: Any?): Any? {
         val args = _args as List<*>?
         val proc = _proc as Parser.Symbol?
         var result: Any? = null
@@ -1854,7 +1854,7 @@ class Jsonata {
      * @param {Array} args - Arguments
      * @returns {{lambda: boolean, input: *, environment: {bind, lookup}, arguments: Array, body: *}} Result of partially applied procedure
      */
-    fun partialApplyProcedure(proc: Parser.Symbol?, args: List<Any?>): Parser.Symbol {
+    private fun partialApplyProcedure(proc: Parser.Symbol?, args: List<Any?>): Parser.Symbol {
         // create a closure, bind the supplied parameters and return a Object that takes the remaining (?) parameters
         // Note Uli: if no env, bind to default env so the native functions can be found
         val env = createFrame(if (proc!!.environment != null) proc.environment else this.environment)
@@ -1886,7 +1886,7 @@ class Jsonata {
      * @param {Array} args - Arguments
      * @returns {{lambda: boolean, input: *, environment: {bind, lookup}, arguments: Array, body: *}} Result of partially applying native function
      */
-    fun partialApplyNativeFunction(_native: JFunction?, args: List<Any?>): Parser.Symbol {
+    private fun partialApplyNativeFunction(_native: JFunction?, args: List<Any?>): Parser.Symbol {
         // create a lambda Object that wraps and invokes the native function
         // get the list of declared arguments from the native function
         // this has to be picked out from the toString() value
@@ -2045,8 +2045,8 @@ class Jsonata {
         var function: JFunctionCallable? = null
         var functionName: String? = null
         var signature: Signature? = null
-        var method: Method? = null
-        var methodInstance: Any? = null
+        private var method: Method? = null
+        private var methodInstance: Any? = null
 
         constructor(function: JFunctionCallable, signature: String?) {
             this.function = function
@@ -2098,7 +2098,7 @@ class Jsonata {
      * @param {string} err - error code to lookup
      * @returns {undefined} - `err` is modified in place
      */
-    fun populateMessage(err: Exception): Exception {
+    private fun populateMessage(err: Exception): Exception {
         //  var template = errorCodes[err.code];
         //  if(typeof template !== "undefined") {
         //      // if there are any handlebars, replace them with the field references
@@ -2118,7 +2118,7 @@ class Jsonata {
 
     var errors: List<Exception>? = null
     var environment: Frame
-    var ast: Parser.Symbol? = null
+    private var ast: Parser.Symbol? = null
     var timestamp: Long
     var input: Any? = null
 
@@ -2272,7 +2272,7 @@ class Jsonata {
             return booledValue ?: false
         }
 
-        var chainAST: Parser.Symbol? = null // = new Parser().parse("function($f, $g) { function($x){ $g($f($x)) } }");
+        private var chainAST: Parser.Symbol? = null // = new Parser().parse("function($f, $g) { function($x){ $g($f($x)) } }");
 
         fun chainAST(): Parser.Symbol? {
             if (chainAST == null) {
@@ -2311,7 +2311,7 @@ class Jsonata {
             return JFunction(toJFunctionCallable(func), signature)
         }
 
-        fun <R> toJFunctionCallable(func: FnVarArgs<R>): JFunctionCallable {
+        private fun <R> toJFunctionCallable(func: FnVarArgs<R>): JFunctionCallable {
             return object : JFunctionCallable {
                 override fun call(input: Any?, args: List<*>?): Any? {
                     return func.apply(args)
@@ -2323,7 +2323,7 @@ class Jsonata {
             return JFunction(toJFunctionCallable(func), signature)
         }
 
-        fun <R> toJFunctionCallable(func: Fn0<R>): JFunctionCallable {
+        private fun <R> toJFunctionCallable(func: Fn0<R>): JFunctionCallable {
             return object : JFunctionCallable {
                 override fun call(input: Any?, args: List<*>?): Any? {
                     return func.get()
@@ -2335,7 +2335,7 @@ class Jsonata {
             return JFunction(toJFunctionCallable(func), signature)
         }
 
-        fun <A, R> toJFunctionCallable(func: Fn1<A, R>): JFunctionCallable {
+        private fun <A, R> toJFunctionCallable(func: Fn1<A, R>): JFunctionCallable {
             return object : JFunctionCallable {
                 override fun call(input: Any?, args: List<*>?): Any? {
                     return func.apply(args!![0] as A)
@@ -2347,7 +2347,7 @@ class Jsonata {
             return JFunction(toJFunctionCallable(func), signature)
         }
 
-        fun <A, B, R> toJFunctionCallable(func: Fn2<A, B, R>): JFunctionCallable {
+        private fun <A, B, R> toJFunctionCallable(func: Fn2<A, B, R>): JFunctionCallable {
             return object : JFunctionCallable {
                 override fun call(input: Any?, args: List<*>?): Any? {
                     return func.apply(args!![0] as A, args[1] as B)
@@ -2359,7 +2359,7 @@ class Jsonata {
             return JFunction(toJFunctionCallable(func), signature)
         }
 
-        fun <A, B, C, R> toJFunctionCallable(func: Fn3<A, B, C, R>): JFunctionCallable {
+        private fun <A, B, C, R> toJFunctionCallable(func: Fn3<A, B, C, R>): JFunctionCallable {
             return object : JFunctionCallable {
                 override fun call(input: Any?, args: List<*>?): Any? {
                     return func.apply(args!![0] as A, args[1] as B, args[2] as C)
@@ -2371,7 +2371,7 @@ class Jsonata {
             return JFunction(toJFunctionCallable(func), signature)
         }
 
-        fun <A, B, C, D, R> toJFunctionCallable(func: Fn4<A, B, C, D, R>): JFunctionCallable {
+        private fun <A, B, C, D, R> toJFunctionCallable(func: Fn4<A, B, C, D, R>): JFunctionCallable {
             return object : JFunctionCallable {
                 override fun call(input: Any?, args: List<*>?): Any? {
                     return func.apply(args!![0] as A, args[1] as B, args[2] as C, args[3] as D)
@@ -2383,7 +2383,7 @@ class Jsonata {
             return JFunction(toJFunctionCallable(func), signature)
         }
 
-        fun <A, B, C, D, E, R> toJFunctionCallable(func: Fn5<A, B, C, D, E, R>): JFunctionCallable {
+        private fun <A, B, C, D, E, R> toJFunctionCallable(func: Fn5<A, B, C, D, E, R>): JFunctionCallable {
             return object : JFunctionCallable {
                 override fun call(input: Any?, args: List<*>?): Any? {
                     return func.apply(args!![0] as A, args[1] as B, args[2] as C, args[3] as D, args[4] as E)
@@ -2399,7 +2399,7 @@ class Jsonata {
             return JFunction(toJFunctionCallable(func), signature)
         }
 
-        fun <A, B, C, D, E, F, R> toJFunctionCallable(func: Fn6<A, B, C, D, E, F, R>): JFunctionCallable {
+        private fun <A, B, C, D, E, F, R> toJFunctionCallable(func: Fn6<A, B, C, D, E, F, R>): JFunctionCallable {
             return object : JFunctionCallable {
                 override fun call(input: Any?, args: List<*>?): Any? {
                     return func.apply(
@@ -2419,7 +2419,7 @@ class Jsonata {
             return JFunction(toJFunctionCallable(func), signature)
         }
 
-        fun <A, B, C, D, E, F, G, R> toJFunctionCallable(func: Fn7<A, B, C, D, E, F, G, R>): JFunctionCallable {
+        private fun <A, B, C, D, E, F, G, R> toJFunctionCallable(func: Fn7<A, B, C, D, E, F, G, R>): JFunctionCallable {
             return object : JFunctionCallable {
                 override fun call(input: Any?, args: List<*>?): Any? {
                     return func.apply(
@@ -2439,7 +2439,7 @@ class Jsonata {
             return JFunction(toJFunctionCallable(func), signature)
         }
 
-        fun <A, B, C, D, E, F, G, H, R> toJFunctionCallable(func: Fn8<A, B, C, D, E, F, G, H, R>): JFunctionCallable {
+        private fun <A, B, C, D, E, F, G, H, R> toJFunctionCallable(func: Fn8<A, B, C, D, E, F, G, H, R>): JFunctionCallable {
             return object : JFunctionCallable {
                 override fun call(input: Any?, args: List<*>?): Any? {
                     return func.apply(
@@ -2452,7 +2452,7 @@ class Jsonata {
         }
 
         // Function registration
-        fun registerFunctions() {
+        private fun registerFunctions() {
             defineFunction("sum", "<a<n>:n>")
             defineFunction("count", "<a:n>")
             defineFunction("max", "<a<n>:n>")
@@ -2724,7 +2724,7 @@ class Jsonata {
             return Jsonata(expression)
         }
 
-        val _parser: ThreadLocal<Parser> = ThreadLocal()
+        private val _parser: ThreadLocal<Parser> = ThreadLocal()
         @Synchronized
         fun getParser(): Parser? {
             var p = _parser.get()
