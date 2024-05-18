@@ -167,12 +167,12 @@ object Functions {
      * Avoids creation of intermediate String objects
      */
     @JvmStatic
-    fun string(b: StringBuilder, arg: Any?, prettify: Boolean, indent: String?) {
+    fun string(b: StringBuilder?, arg: Any?, prettify: Boolean?, indent: String?) {
         // if (arg == null)
         //   return null;
 
         if (arg == null || arg === Jsonata.NULL_VALUE) {
-            b.append("null")
+            b?.append("null")
             return
         }
 
@@ -192,73 +192,73 @@ object Functions {
             if (res.indexOf("E+") > 0) res = res.replace("E+", "e+")
             if (res.indexOf("E-") > 0) res = res.replace("E-", "e-")
 
-            b.append(res)
+            b?.append(res)
             return
         }
 
         if (arg is Number || arg is Boolean) {
-            b.append(arg)
+            b?.append(arg)
             return
         }
 
         if (arg is String) {
             // quotes within strings must be escaped
-            quote((arg as String?)!!, b)
+            quote((arg as String?)!!, b!!)
             return
         }
 
         if (arg is Map<*, *>) {
-            b.append('{')
-            if (prettify) b.append('\n')
+            b?.append('{')
+            if (prettify == true) b?.append('\n')
             for ((key, v) in (arg as Map<String?, Any>)) {
-                if (prettify) {
-                    b.append(indent)
-                    b.append("  ")
+                if (prettify == true) {
+                    b?.append(indent)
+                    b?.append("  ")
                 }
-                b.append('"')
-                b.append(key)
-                b.append('"')
-                b.append(':')
-                if (prettify) b.append(' ')
+                b?.append('"')
+                b?.append(key)
+                b?.append('"')
+                b?.append(':')
+                if (prettify == true) b?.append(' ')
                 if (v is String || v is Parser.Symbol
                     || v is JFunction
                 ) {
-                    b.append('"')
+                    b?.append('"')
                     string(b, v, prettify, "$indent  ")
-                    b.append('"')
+                    b?.append('"')
                 } else string(b, v, prettify, "$indent  ")
-                b.append(',')
-                if (prettify) b.append('\n')
+                b?.append(',')
+                if (prettify == true) b?.append('\n')
             }
-            if (!(arg as Map<*, *>).isEmpty()) b.deleteCharAt(b.length - (if (prettify) 2 else 1))
-            if (prettify) b.append(indent)
-            b.append('}')
+            if (!(arg as Map<*, *>).isEmpty()) b?.deleteCharAt(b.length - (if (prettify == true) 2 else 1))
+            if (prettify == true) b?.append(indent)
+            b?.append('}')
             return
         }
 
         if ((arg is List<*>)) {
             if (arg.isEmpty()) {
-                b.append("[]")
+                b?.append("[]")
                 return
             }
-            b.append('[')
-            if (prettify) b.append('\n')
+            b?.append('[')
+            if (prettify == true) b?.append('\n')
             for (v in arg) {
-                if (prettify) {
-                    b.append(indent)
-                    b.append("  ")
+                if (prettify == true) {
+                    b?.append(indent)
+                    b?.append("  ")
                 }
                 if (v is String || v is Parser.Symbol || v is JFunction) {
-                    b.append('"')
+                    b?.append('"')
                     string(b, v, prettify, "$indent  ")
-                    b.append('"')
+                    b?.append('"')
                 } else string(b, v, prettify, "$indent  ")
-                b.append(',')
-                if (prettify) b.append('\n')
+                b?.append(',')
+                if (prettify == true) b?.append('\n')
             }
-            if (!arg.isEmpty()) b.deleteCharAt(b.length - (if (prettify) 2 else 1))
-            if (prettify) b.append(indent)
-            b.append(']')
+            if (!arg.isEmpty()) b?.deleteCharAt(b.length - (if (prettify == true) 2 else 1))
+            if (prettify == true) b?.append(indent)
+            b?.append(']')
             return
         }
 
@@ -374,12 +374,12 @@ object Functions {
      * length is 0 or a negative number, an empty string is returned.
      */
     @JvmStatic
-    fun substr(str: String, start: Int?, length: Int?): String {
+    fun substr(str: String?, start: Int?, length: Int?): String {
         // below has to convert start and length for emojis and unicode
 
         var start = start
         var length = length
-        val origLen = str.length
+        val origLen = str!!.length
 
         val strData = Objects.requireNonNull(str).intern()
         val strLen = strData.codePointCount(0, strData.length)
@@ -458,13 +458,13 @@ object Functions {
      * @returns {*} Substring
      */
     @JvmStatic
-    fun substringAfter(str: String?, chars: String): String? {
+    fun substringAfter(str: String?, chars: String?): String? {
         // undefined inputs always return undefined
         if (str == null) {
             return null
         }
 
-        val pos = str.indexOf(chars)
+        val pos = str.indexOf(chars!!)
         return if (pos > -1) {
             str.substring(pos + chars.length)
         } else {
@@ -560,7 +560,7 @@ object Functions {
      * @returns {string} - padded string
      */
     @JvmStatic
-    fun pad(str: String?, width: Int, _char: String?): String? {
+    fun pad(str: String?, width: Int?, _char: String?): String? {
         // undefined inputs always return undefined
         var _char = _char
         if (str == null) {
@@ -571,7 +571,7 @@ object Functions {
             _char = " "
         }
 
-        val result = if (width < 0) {
+        val result = if (width!! < 0) {
             leftPad(str, -width, _char)
         } else {
             rightPad(str, width, _char)
@@ -581,7 +581,7 @@ object Functions {
 
     // Source: Jsonata4Java PadFunction
     @JvmStatic
-    fun leftPad(str: String?, size: Int, padStr: String?): String? {
+    fun leftPad(str: String?, size: Int?, padStr: String?): String? {
         var padStr = padStr
         if (str == null) {
             return null
@@ -599,7 +599,7 @@ object Functions {
         if (padLen == 0) {
             padStr = " "
         }
-        val pads = size - strLen
+        val pads = size!! - strLen
         if (pads <= 0) {
             return str
         }
@@ -612,7 +612,7 @@ object Functions {
 
     // Source: Jsonata4Java PadFunction
     @JvmStatic
-    fun rightPad(str: String?, size: Int, padStr: String?): String? {
+    fun rightPad(str: String?, size: Int?, padStr: String?): String? {
         var padStr = padStr
         if (str == null) {
             return null
@@ -630,7 +630,7 @@ object Functions {
         if (padLen == 0) {
             padStr = " "
         }
-        val pads = size - strLen
+        val pads = size!! - strLen
         if (pads <= 0) {
             return str
         }
@@ -649,9 +649,9 @@ object Functions {
      * @returns {object} - structure that represents the match(es)
      */
     @JvmStatic
-    fun evaluateMatcher(matcher: Pattern, str: String?): List<RegexpMatch> {
+    fun evaluateMatcher(matcher: Pattern?, str: String?): List<RegexpMatch> {
         val res: MutableList<RegexpMatch> = ArrayList()
-        val m = matcher.matcher(str)
+        val m = matcher!!.matcher(str)
         while (m.find()) {
             val rm = RegexpMatch()
 
@@ -676,7 +676,7 @@ object Functions {
      * @returns {Boolean} - true if str contains token
      */
     @JvmStatic
-    fun contains(str: String?, token: Any): Boolean? {
+    fun contains(str: String?, token: Any?): Boolean? {
         // undefined inputs always return undefined
         if (str == null) {
             return null
@@ -707,7 +707,7 @@ object Functions {
      * @returns {Array} The array of match objects
      */
     @JvmStatic
-    fun match(str: String?, regex: Pattern, limit: Int?): MutableList<Map<*, *>>? {
+    fun match(str: String?, regex: Pattern?, limit: Int?): MutableList<Map<*, *>>? {
         // undefined inputs always return undefined
         if (str == null) {
             return null
@@ -761,12 +761,12 @@ object Functions {
     }
 
     @JvmStatic
-    fun safeReplacement(`in`: String): String {
+    fun safeReplacement(`in`: String?): String {
         // In JSONata and in Java the $ in the replacement test usually starts the insertion of a capturing group
         // In order to replace a simple $ in Java you have to escape the $ with "\$"
         // in JSONata you do this with a '$$'
         // "\$" followed any character besides '<' and and digit into $ + this character  
-        return `in`.replace("\\$\\$".toRegex(), "\\\\\\$")
+        return `in`!!.replace("\\$\\$".toRegex(), "\\\\\\$")
             .replace("([^\\\\]|^)\\$([^0-9^<])".toRegex(), "$1\\\\\\$$2")
             .replace("\\$$".toRegex(), "\\\\\\$") // allow $ at end
     }
@@ -783,13 +783,13 @@ object Functions {
      * @return
      */
     @JvmStatic
-    fun safeReplaceAll(s: String?, pattern: Pattern, _replacement: Any): String? {
+    fun safeReplaceAll(s: String?, pattern: Pattern?, _replacement: Any?): String? {
         if (_replacement !is String) return safeReplaceAllFn(s, pattern, _replacement)
 
         var replacement = _replacement as String
 
         replacement = safeReplacement(replacement)
-        val m = pattern.matcher(s)
+        val m = pattern!!.matcher(s)
         var r: String? = null
         for (i in 0..9) {
             try {
@@ -817,9 +817,9 @@ object Functions {
      * @return
      */
     @JvmStatic
-    fun toJsonataMatch(mr: MatchResult): Map<*, *> {
+    fun toJsonataMatch(mr: MatchResult?): Map<*, *> {
         val obj: MutableMap<String, Any?> = LinkedHashMap<String, Any?>()
-        obj["match"] = mr.group()
+        obj["match"] = mr!!.group()
 
         val groups: MutableList<Any> = ArrayList<Any>()
         for (i in 0..mr.groupCount()) groups.add(mr.group(i))
@@ -837,8 +837,8 @@ object Functions {
      * @return
      */
     @JvmStatic
-    fun safeReplaceAllFn(s: String?, pattern: Pattern, fn: Any): String? {
-        val m = pattern.matcher(s)
+    fun safeReplaceAllFn(s: String?, pattern: Pattern?, fn: Any?): String? {
+        val m = pattern!!.matcher(s)
         var r: String? = null
         r = m.replaceAll { t: MatchResult ->
             try {
@@ -862,10 +862,10 @@ object Functions {
      * @return
      */
     @JvmStatic
-    fun safeReplaceFirst(s: String, pattern: Pattern, replacement: String): String? {
+    fun safeReplaceFirst(s: String?, pattern: Pattern?, replacement: String?): String? {
         var replacement = replacement
         replacement = safeReplacement(replacement)
-        val m = pattern.matcher(s)
+        val m = pattern!!.matcher(s)
         var r: String? = null
         for (i in 0..9) {
             try {
@@ -881,14 +881,14 @@ object Functions {
                 // Adjust replacement to remove the non-existing group
                 val g = "" + msg[msg.length - 1]
 
-                replacement = replacement.replace("$$g", "")
+                replacement = replacement!!.replace("$$g", "")
             }
         }
         return r
     }
 
     @JvmStatic
-    fun replace(str: String?, pattern: Any, replacement: Any, limit: Int?): String? {
+    fun replace(str: String?, pattern: Any?, replacement: Any?, limit: Int?): String? {
         var str = str ?: return null
         if (pattern is String) if (pattern.isEmpty()) throw JException(
             "Second argument of replace function cannot be an empty string",
@@ -1062,7 +1062,7 @@ object Functions {
     }
 
     @JvmStatic
-    fun split(str: String?, pattern: Any, limit: Number?): List<String?>? {
+    fun split(str: String?, pattern: Any?, limit: Number?): List<String?>? {
         if (str == null) return null
 
         if (limit != null && limit.toInt() < 0) throw JException("D3020", -1, str)
@@ -1408,14 +1408,14 @@ object Functions {
      * @returns {Number} rounded integer
      */
     @JvmStatic
-    fun power(arg: Number?, exp: Number): Number? {
+    fun power(arg: Number?, exp: Number?): Number? {
         // undefined inputs always return undefined
 
         if (arg == null) {
             return null
         }
 
-        val result: Double = arg.toDouble().pow(exp.toDouble())
+        val result: Double = arg.toDouble().pow(exp!!.toDouble())
 
         if (!java.lang.Double.isFinite(result)) {
             throw JException(
@@ -1502,9 +1502,9 @@ object Functions {
 
 
     @JvmStatic
-    fun getFunctionArity(func: Any): Int {
+    fun getFunctionArity(func: Any?): Int {
         return if (func is JFunction) {
-            func.signature.minNumberOfArgs
+            func.signature!!.minNumberOfArgs
         } else {
             // Lambda
             (func as Parser.Symbol).arguments!!.size
@@ -1521,7 +1521,7 @@ object Functions {
      * @returns {*[]} the argument list
      */
     @JvmStatic
-    fun hofFuncArgs(func: Any, arg1: Any?, arg2: Any?, arg3: Any?): List<*> {
+    fun hofFuncArgs(func: Any?, arg1: Any?, arg2: Any?, arg3: Any?): List<*> {
         val func_args: MutableList<Any?> = ArrayList<Any?>()
         func_args.add(arg1) // the first arg (the value) is required
         // the other two are optional - only supply it if the function can take it
@@ -1545,7 +1545,7 @@ object Functions {
      */
     @Throws(Throwable::class)
     @JvmStatic
-    fun funcApply(func: Any, funcArgs: List<*>?): Any? {
+    fun funcApply(func: Any?, funcArgs: List<*>?): Any? {
         val res = if (isLambda(func)) Jsonata.current.get()
             .apply(func, funcArgs, null, Jsonata.current.get().environment)
         else (func as JFunction).call(null, funcArgs)
@@ -1560,7 +1560,7 @@ object Functions {
      */
     @Throws(Throwable::class)
     @JvmStatic
-    fun map(arr: List<*>?, func: Any): List<*>? {
+    fun map(arr: List<*>?, func: Any?): List<*>? {
         // undefined inputs always return undefined
 
         if (arr == null) {
@@ -1587,7 +1587,7 @@ object Functions {
      */
     @Throws(Throwable::class)
     @JvmStatic
-    fun filter(arr: List<*>?, func: Any): List<*>? {
+    fun filter(arr: List<*>?, func: Any?): List<*>? {
         // undefined inputs always return undefined
         if (arr == null) {
             return null
@@ -1696,7 +1696,7 @@ object Functions {
      */
     @Throws(Throwable::class)
     @JvmStatic
-    fun foldLeft(sequence: List<*>?, func: Any, init: Any?): Any? {
+    fun foldLeft(sequence: List<*>?, func: Any?, init: Any?): Any? {
         // undefined inputs always return undefined
         if (sequence == null) {
             return null
@@ -1743,11 +1743,11 @@ object Functions {
      * @returns {Array} Array of keys
      */
     @JvmStatic
-    fun keys(arg: Any?): List<*> {
+    fun keys(arg: Any?): List<Any> {
         val result = createSequence()
 
         if (arg is List<*>) {
-            val keys: MutableSet<Any?> = LinkedHashSet<Any?>()
+            val keys: MutableSet<Any> = LinkedHashSet<Any>()
             // merge the keys of all of the items in the array
             for (el in arg) {
                 keys.addAll(keys(el))
@@ -1755,9 +1755,9 @@ object Functions {
 
             result.addAll(keys)
         } else if (arg is Map<*, *>) {
-            result.addAll(arg.keys)
+            result.addAll(arg.keys as Collection<Any>)
         }
-        return result
+        return result as List<Any>
     }
 
     // here: append, lookup
@@ -1852,7 +1852,7 @@ object Functions {
      */
     @Throws(Throwable::class)
     @JvmStatic
-    fun each(obj: Map<*, *>?, func: Any): List<*>? {
+    fun each(obj: Map<*, *>?, func: Any?): List<*>? {
         if (obj == null) {
             return null
         }
@@ -1894,8 +1894,8 @@ object Functions {
      */
     @Throws(Throwable::class)
     @JvmStatic
-    fun assertFn(condition: Boolean, message: String?) {
-        if (!condition) {
+    fun assertFn(condition: Boolean?, message: String?) {
+        if (condition == false) {
             throw JException("D3141", -1, "\$assert() statement failed")
             //                message: message || "$assert() statement failed"
         }
@@ -2018,13 +2018,13 @@ object Functions {
         if (_arr !is List<*> || _arr.size <= 1) {
             return _arr
         }
-        val arr = _arr
+        val arr = _arr as List<Any>
 
         val results = if ((arr is Utils.JList<*> /*sequence*/)) createSequence() else ArrayList()
 
         // Create distinct list of elements by adding all to a set,
         // and then adding the set to the result
-        val set: LinkedHashSet<Any?> = LinkedHashSet<Any?>(arr.size)
+        val set: LinkedHashSet<Any> = LinkedHashSet<Any>(arr.size)
         set.addAll(arr)
         results.addAll(set)
 
@@ -2042,7 +2042,7 @@ object Functions {
      */
     @Throws(Throwable::class)
     @JvmStatic
-    fun sift(arg: Map<Any?, Any?>?, func: Any): Any? {
+    fun sift(arg: Map<Any?, Any?>?, func: Any?): Any? {
         if (arg == null) {
             return null
         }
@@ -2147,12 +2147,12 @@ object Functions {
     }
 
     @JvmStatic
-    fun test(a: String, b: String): String {
+    fun test(a: String?, b: String?): String {
         return a + b
     }
 
     @JvmStatic
-    fun getFunction(clz: Class<*>?, name: String): Method? {
+    fun getFunction(clz: Class<*>?, name: String?): Method? {
         val methods = Functions::class.java.methods
         for (m in methods) {
             // if (m.getModifiers() == (Modifier.STATIC | Modifier.PUBLIC) ) {
@@ -2168,7 +2168,7 @@ object Functions {
 
     @Throws(Throwable::class)
     @JvmStatic
-    fun call(clz: Class<*>?, instance: Any?, name: String, args: List<Any?>?): Any? {
+    fun call(clz: Class<*>?, instance: Any?, name: String?, args: List<Any?>?): Any? {
         return call(instance, getFunction(clz, name), args)
     }
 
@@ -2202,6 +2202,15 @@ object Functions {
         if (nargs == 1 && types[0] == Utils.JList::class.java) {
             val allArgs: Utils.JList<*> = Utils.JList(args)
             callArgs = java.util.List.of(allArgs)
+        }
+
+        System.out.println("**** method " + m)
+        for (i in callArgs.indices) {
+            if (callArgs[i] == null) {
+                System.out.println("**** arg " + i + " null");
+            } else {
+                System.out.println("**** arg " + i + " " + callArgs[i]!!.javaClass);
+            }
         }
 
         try {

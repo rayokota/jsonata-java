@@ -74,7 +74,7 @@ object Utils {
         sequence.sequence = true
         if (el !== NONE) {
             if (el is List<*> && el.size == 1) sequence.add(
-                el[0]
+                el[0]!!
             )
             else  // This case does NOT exist in Javascript! Why?
                 sequence.add(el)

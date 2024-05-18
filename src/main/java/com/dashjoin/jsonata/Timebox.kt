@@ -41,16 +41,20 @@ class Timebox @JvmOverloads constructor(expr: Jsonata.Frame, timeout: Long = 500
         this.maxDepth = maxDepth
 
         // register callbacks
-        expr.setEvaluateEntryCallback { _exp: Parser.Symbol?, _input: Any?, _env: Jsonata.Frame ->
-            if (_env.isParallelCall) return@setEvaluateEntryCallback
-            depth++
-            checkRunnaway()
-        }
-        expr.setEvaluateExitCallback { _exp: Parser.Symbol?, _input: Any?, _env: Jsonata.Frame, _res: Any? ->
-            if (_env.isParallelCall) return@setEvaluateExitCallback
-            depth--
-            checkRunnaway()
-        }
+        expr.setEvaluateEntryCallback(object : Jsonata.EntryCallback {
+            override fun callback(expr: Parser.Symbol?, input: Any?, environment: Jsonata.Frame) {
+                if (environment.isParallelCall) return
+                depth++
+                checkRunnaway()
+            }
+        })
+        expr.setEvaluateExitCallback(object : Jsonata.ExitCallback {
+            override fun callback(expr: Parser.Symbol?, input: Any?, environment: Jsonata.Frame, result: Any?) {
+                if (environment.isParallelCall) return
+                depth--
+                checkRunnaway()
+            }
+        })
     }
 
     fun checkRunnaway() {
