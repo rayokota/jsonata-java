@@ -110,13 +110,11 @@ object Utils {
         if (isHigh) throw JException("Malformed URL", 0)
     }
 
-    @JvmStatic
-    fun convertValue(`val`: Any?): Any? {
+    private fun convertValue(`val`: Any?): Any? {
         return if (`val` !== Jsonata.NULL_VALUE) `val` else null
     }
 
-    @JvmStatic
-    fun convertMapNulls(res: MutableMap<String?, Any?>) {
+    private fun convertMapNulls(res: MutableMap<String?, Any?>) {
         for (e in res.entries) {
             val `val` = e.value
             val l = convertValue(`val`)
@@ -125,8 +123,7 @@ object Utils {
         }
     }
 
-    @JvmStatic
-    fun convertListNulls(res: MutableList<Any?>) {
+    private fun convertListNulls(res: MutableList<Any?>) {
         for (i in res.indices) {
             val `val` = res[i]
             val l = convertValue(`val`)
@@ -135,8 +132,7 @@ object Utils {
         }
     }
 
-    @JvmStatic
-    fun recurse(`val`: Any?) {
+    private fun recurse(`val`: Any?) {
         if (`val` is Map<*, *>) convertMapNulls(`val` as MutableMap<String?, Any?>)
         if (`val` is List<*>) convertListNulls(`val` as MutableList<Any?>)
     }

@@ -166,8 +166,7 @@ object Functions {
      * Internal recursive string function based on StringBuilder.
      * Avoids creation of intermediate String objects
      */
-    @JvmStatic
-    fun string(b: StringBuilder?, arg: Any?, prettify: Boolean?, indent: String?) {
+    private fun string(b: StringBuilder, arg: Any?, prettify: Boolean, indent: String) {
         // if (arg == null)
         //   return null;
 
@@ -760,8 +759,7 @@ object Functions {
         return java.lang.String.join(separator, strs)
     }
 
-    @JvmStatic
-    fun safeReplacement(`in`: String?): String {
+    private fun safeReplacement(`in`: String): String {
         // In JSONata and in Java the $ in the replacement test usually starts the insertion of a capturing group
         // In order to replace a simple $ in Java you have to escape the $ with "\$"
         // in JSONata you do this with a '$$'
@@ -782,8 +780,7 @@ object Functions {
      * @param replacement
      * @return
      */
-    @JvmStatic
-    fun safeReplaceAll(s: String?, pattern: Pattern?, _replacement: Any?): String? {
+    private fun safeReplaceAll(s: String?, pattern: Pattern, _replacement: Any?): String? {
         if (_replacement !is String) return safeReplaceAllFn(s, pattern, _replacement)
 
         var replacement = _replacement as String
@@ -816,8 +813,7 @@ object Functions {
      * @param mr
      * @return
      */
-    @JvmStatic
-    fun toJsonataMatch(mr: MatchResult?): Map<*, *> {
+    private fun toJsonataMatch(mr: MatchResult): Map<*, *> {
         val obj: MutableMap<String, Any?> = LinkedHashMap<String, Any?>()
         obj["match"] = mr!!.group()
 
@@ -836,8 +832,7 @@ object Functions {
      * @param fn
      * @return
      */
-    @JvmStatic
-    fun safeReplaceAllFn(s: String?, pattern: Pattern?, fn: Any?): String? {
+    private fun safeReplaceAllFn(s: String?, pattern: Pattern, fn: Any?): String? {
         val m = pattern!!.matcher(s)
         var r: String? = null
         r = m.replaceAll { t: MatchResult ->
@@ -861,8 +856,7 @@ object Functions {
      * @param replacement
      * @return
      */
-    @JvmStatic
-    fun safeReplaceFirst(s: String?, pattern: Pattern?, replacement: String?): String? {
+    private fun safeReplaceFirst(s: String?, pattern: Pattern, replacement: String): String? {
         var replacement = replacement
         replacement = safeReplacement(replacement)
         val m = pattern!!.matcher(s)
@@ -1005,8 +999,7 @@ object Functions {
         return URLEncoder.encode(str, StandardCharsets.UTF_8)
     }
 
-    @JvmStatic
-    fun encodeURI(uri: String?): String? {
+    private fun encodeURI(uri: String?): String? {
         var result: String? = null
         if (uri != null) {
             try {
