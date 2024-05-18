@@ -53,10 +53,7 @@ class Parser {
     fun remainingTokens(): List<Tokenizer.Token> {
         val remaining: MutableList<Tokenizer.Token> = ArrayList()
         if (node!!.id != "(end)") {
-            val t = Tokenizer.Token()
-            t.type = node!!.type
-            t.value = node!!.value
-            t.position = node!!.position
+            val t = Tokenizer.Token(node!!.type, node!!.value, node!!.position)
             remaining.add(t)
         }
         var nxt = lexer!!.next(false)

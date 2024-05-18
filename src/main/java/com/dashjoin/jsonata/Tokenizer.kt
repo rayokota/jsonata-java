@@ -32,20 +32,10 @@ class Tokenizer internal constructor(// Tokenizer (lexer) - invoked by the parse
     var position: Int = 0
     var length: Int = path.length // = path.length;
 
-    class Token {
-        var type: String? = null
-        var value: Any? = null
-        var position: Int = 0
-
-        //
-        var id: String? = null
-    }
+    data class Token(val type: String? = null, val value: Any? = null, val position: Int = 0, var id: String? = null)
 
     fun create(type: String?, value: Any?): Token {
-        val t = Token()
-        t.type = type
-        t.value = value
-        t.position = position
+        val t = Token(type, value, position)
         return t
     }
 
