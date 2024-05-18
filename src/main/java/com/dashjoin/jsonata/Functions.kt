@@ -1507,7 +1507,7 @@ object Functions {
             func.signature.minNumberOfArgs
         } else {
             // Lambda
-            (func as Parser.Symbol).arguments.size
+            (func as Parser.Symbol).arguments!!.size
         }
     }
 

@@ -2457,7 +2457,7 @@ public class Jsonata {
          return err;
      }
  
-    List<Exception> errors;
+    List<? extends Exception> errors;
     Frame environment;
     Symbol ast;
     long timestamp;
@@ -2619,7 +2619,7 @@ public class Jsonata {
       environment.bind(name, implementation);
   }
 
-    public List<Exception> getErrors() {
+    public List<? extends Exception> getErrors() {
         return errors;
     }
 
