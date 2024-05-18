@@ -69,7 +69,7 @@ abstract class JsonHandler<A, O> {
      * Indicates the beginning of a `null` literal in the JSON input. This method will be
      * called when reading the first character of the literal.
      */
-    fun startNull() {
+    open fun startNull() {
     }
 
     /**
@@ -83,7 +83,7 @@ abstract class JsonHandler<A, O> {
      * Indicates the beginning of a boolean literal (`true` or `false`) in the
      * JSON input. This method will be called when reading the first character of the literal.
      */
-    fun startBoolean() {
+    open fun startBoolean() {
     }
 
     /**
@@ -100,7 +100,7 @@ abstract class JsonHandler<A, O> {
      * Indicates the beginning of a string in the JSON input. This method will be called when reading
      * the opening double quote character (`'"'`).
      */
-    fun startString() {
+    open fun startString() {
     }
 
     /**
@@ -117,7 +117,7 @@ abstract class JsonHandler<A, O> {
      * Indicates the beginning of a number in the JSON input. This method will be called when reading
      * the first character of the number.
      */
-    fun startNumber() {
+    open fun startNumber() {
     }
 
     /**
@@ -166,7 +166,7 @@ abstract class JsonHandler<A, O> {
      * the array handler returned from [.startArray], or `null` if not
      * provided
      */
-    fun startArrayValue(array: A) {
+    open fun startArrayValue(array: A) {
     }
 
     /**
@@ -216,7 +216,7 @@ abstract class JsonHandler<A, O> {
      * the object handler returned from [.startObject], or `null` if not
      * provided
      */
-    fun startObjectName(`object`: O) {
+    open fun startObjectName(`object`: O) {
     }
 
     /**
@@ -228,7 +228,7 @@ abstract class JsonHandler<A, O> {
      * @param name
      * the parsed member name
      */
-    fun endObjectName(`object`: O, name: String?) {
+    open fun endObjectName(`object`: O, name: String?) {
     }
 
     /**
@@ -241,7 +241,7 @@ abstract class JsonHandler<A, O> {
      * @param name
      * the member name
      */
-    fun startObjectValue(`object`: O, name: String?) {
+    open fun startObjectValue(`object`: O, name: String?) {
     }
 
     /**
