@@ -1694,13 +1694,19 @@ class Jsonata {
             } else if (proc is JLambda) {
                 // System.err.println("Lambda "+proc);
                 val _args = validatedArgs as List<*>?
-                if (proc is Fn0<*>) {
-                    result = proc.get()
-                } else if (proc is Fn1<*, *>) {
-                    result = (proc as Fn1<Any?, Any?>).apply(if (_args!!.isEmpty()) null else _args[0])
-                } else if (proc is Fn2<*, *, *>) {
-                    result =
-                        (proc as Fn2<Any?, Any?, Any?>).apply(if (_args!!.isEmpty()) null else _args[0], if (_args.size <= 1) null else _args[1])
+                when (proc) {
+                    is Fn0<*> -> {
+                        result = proc.get()
+                    }
+
+                    is Fn1<*, *> -> {
+                        result = (proc as Fn1<Any?, Any?>).apply(if (_args!!.isEmpty()) null else _args[0])
+                    }
+
+                    is Fn2<*, *, *> -> {
+                        result =
+                            (proc as Fn2<Any?, Any?, Any?>).apply(if (_args!!.isEmpty()) null else _args[0], if (_args.size <= 1) null else _args[1])
+                    }
                 }
             } else if (proc is Pattern) {
                 val _res: MutableList<Any> = ArrayList()

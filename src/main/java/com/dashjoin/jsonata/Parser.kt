@@ -674,15 +674,19 @@ class Parser {
                     val term = Symbol()
                     term.descending = false
 
-                    if (node!!.id == "<") {
-                        // ascending sort
-                        advance("<")
-                    } else if (node!!.id == ">") {
-                        // descending sort
-                        term.descending = true
-                        advance(">")
-                    } else {
-                        //unspecified - default to ascending
+                    when (node!!.id) {
+                        "<" -> {
+                            // ascending sort
+                            advance("<")
+                        }
+                        ">" -> {
+                            // descending sort
+                            term.descending = true
+                            advance(">")
+                        }
+                        else -> {
+                            //unspecified - default to ascending
+                        }
                     }
                     term.expression = this@Parser.expression(0)
                     terms.add(term)

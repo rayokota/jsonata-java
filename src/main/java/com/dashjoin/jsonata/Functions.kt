@@ -677,16 +677,22 @@ object Functions {
 
         val result: Boolean
 
-        if (token is String) {
-            result = (str.indexOf(token) != -1)
-        } else if (token is Pattern) {
-            val matches = evaluateMatcher(token, str)
-            //if (dbg) System.out.println("match = "+matches);
-            //result = (typeof matches !== 'undefined');
-            //throw new Error("regexp not impl"); //result = false;
-            result = matches.isNotEmpty()
-        } else {
-            throw Error("unknown type to match: $token")
+        when (token) {
+            is String -> {
+                result = (str.indexOf(token) != -1)
+            }
+
+            is Pattern -> {
+                val matches = evaluateMatcher(token, str)
+                //if (dbg) System.out.println("match = "+matches);
+                //result = (typeof matches !== 'undefined');
+                //throw new Error("regexp not impl"); //result = false;
+                result = matches.isNotEmpty()
+            }
+
+            else -> {
+                throw Error("unknown type to match: $token")
+            }
         }
 
         return result
@@ -1281,15 +1287,19 @@ object Functions {
 
         if (arg === Jsonata.NULL_VALUE) throw JException("T0410", -1)
 
-        if (arg is Number) result = arg
-        else if (arg is String) {
-            val s = arg
-            result = if (s.startsWith("0x")) s.substring(2).toLong(16)
-            else if (s.startsWith("0B")) s.substring(2).toLong(2)
-            else if (s.startsWith("0O")) s.substring(2).toLong(8)
-            else arg.toDouble()
-        } else if (arg is Boolean) {
-            result = if (arg) 1 else 0
+        when (arg) {
+            is Number -> result = arg
+            is String -> {
+                val s = arg
+                result = if (s.startsWith("0x")) s.substring(2).toLong(16)
+                else if (s.startsWith("0B")) s.substring(2).toLong(2)
+                else if (s.startsWith("0O")) s.substring(2).toLong(8)
+                else arg.toDouble()
+            }
+
+            is Boolean -> {
+                result = if (arg) 1 else 0
+            }
         }
         return result
     }
@@ -1767,17 +1777,23 @@ object Functions {
     fun spread(arg: Any?): Any? {
         var result: Any? = createSequence()
 
-        if (arg is List<*>) {
-            // spread all of the items in the array
-            for (item in arg) result = append(result, spread(item))
-        } else if (arg is Map<*, *>) {
-            for ((key, value) in (arg as Map<Any?, Any?>)) {
-                val obj = LinkedHashMap<Any, Any>()
-                obj[key!!] = value!!
-                (result as MutableList<Any>?)!!.add(obj)
+        when (arg) {
+            is List<*> -> {
+                // spread all of the items in the array
+                for (item in arg) result = append(result, spread(item))
             }
-        } else {
-            return arg // result = arg;
+
+            is Map<*, *> -> {
+                for ((key, value) in (arg as Map<Any?, Any?>)) {
+                    val obj = LinkedHashMap<Any, Any>()
+                    obj[key!!] = value!!
+                    (result as MutableList<Any>?)!!.add(obj)
+                }
+            }
+
+            else -> {
+                return arg // result = arg;
+            }
         }
         return result
     }

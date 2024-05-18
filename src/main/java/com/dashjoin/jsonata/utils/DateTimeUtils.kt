@@ -792,17 +792,21 @@ object DateTimeUtils : Serializable {
                 }
             }
             if (markerSpec.names != null) {
-                componentValue = if (markerSpec.component == 'M' || markerSpec.component == 'x') {
-                    months[componentValue.toInt() - 1]
-                } else if (markerSpec.component == 'F') {
-                    days[componentValue.toInt()]
-                } else {
-                    throw RuntimeException(
-                        String.format(
-                            Constants.ERR_MSG_INVALID_NAME_MODIFIER,
-                            markerSpec.component
+                componentValue = when (markerSpec.component) {
+                    'M', 'x' -> {
+                        months[componentValue.toInt() - 1]
+                    }
+                    'F' -> {
+                        days[componentValue.toInt()]
+                    }
+                    else -> {
+                        throw RuntimeException(
+                            String.format(
+                                Constants.ERR_MSG_INVALID_NAME_MODIFIER,
+                                markerSpec.component
+                            )
                         )
-                    )
+                    }
                 }
                 if (markerSpec.names == tcase.UPPER) {
                     componentValue = componentValue.uppercase(Locale.getDefault())

@@ -283,14 +283,18 @@ class JsonParser(handler: JsonHandler<*, *>?) {
         read()
         startCapture()
         while (current != '"') {
-            if (current == '\\') {
-                pauseCapture()
-                readEscape()
-                startCapture()
-            } else if (current == null) {
-                throw expected("valid string character")
-            } else {
-                read()
+            when (current) {
+                '\\' -> {
+                    pauseCapture()
+                    readEscape()
+                    startCapture()
+                }
+                null -> {
+                    throw expected("valid string character")
+                }
+                else -> {
+                    read()
+                }
             }
         }
         val string = endCapture()
