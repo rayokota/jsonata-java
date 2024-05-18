@@ -22,8 +22,8 @@ package com.dashjoin.jsonata
  * See Frame.setRuntimeBounds - usually not used directly
  */
 class Timebox(expr: Jsonata.Frame, timeout: Long = 5000L, maxDepth: Int = 100) {
-    var timeout: Long = 5000L
-    var maxDepth: Int = 100
+    private var timeout: Long = 5000L
+    private var maxDepth: Int = 100
 
     var time: Long = System.currentTimeMillis()
     var depth: Int = 0

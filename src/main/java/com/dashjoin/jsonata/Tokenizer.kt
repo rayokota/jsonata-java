@@ -39,7 +39,7 @@ class Tokenizer internal constructor(// Tokenizer (lexer) - invoked by the parse
         return t
     }
 
-    fun isClosingSlash(position: Int): Boolean {
+    private fun isClosingSlash(position: Int): Boolean {
         if (path[position] == '/' && depth == 0) {
             var backslashCount = 0
             while (path[position - (backslashCount + 1)] == '\\') {
@@ -54,7 +54,7 @@ class Tokenizer internal constructor(// Tokenizer (lexer) - invoked by the parse
 
     var depth: Int = 0
 
-    fun scanRegex(): Pattern {
+    private fun scanRegex(): Pattern {
         // the prefix '/' will have been previously scanned. Find the end of the regex.
         // search for closing '/' ignoring any that are escaped, or within brackets
         var start = position
@@ -192,7 +192,7 @@ class Tokenizer internal constructor(// Tokenizer (lexer) - invoked by the parse
                         val octets = path.substring(position + 1, (position + 1) + 4)
                         if (octets.matches("^[0-9a-fA-F]+$".toRegex())) { //  /^[0-9a-fA-F]+$/.test(octets)) {
                             val codepoint = octets.toInt(16)
-                            qstr += Character.toString(codepoint.toChar())
+                            qstr += codepoint.toChar().toString()
                             position += 4
                         } else {
                             throw JException("S0104", position)

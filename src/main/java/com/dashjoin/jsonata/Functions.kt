@@ -831,7 +831,7 @@ object Functions {
         var r: String? = null
         r = m.replaceAll { t: MatchResult ->
             try {
-                val res = funcApply(fn, java.util.List.of(toJsonataMatch(t)))
+                val res = funcApply(fn, listOf(toJsonataMatch(t)))
                 if (res is String) return@replaceAll res
                 else return@replaceAll null
             } catch (e: Throwable) {
@@ -1069,10 +1069,10 @@ object Functions {
                 }
             } else {
                 // Quote separator string + preserve trailing empty strings (-1)
-                result = Arrays.asList(*str.split(Pattern.quote(sep).toRegex()).toTypedArray())
+                result = mutableListOf(*str.split(Pattern.quote(sep).toRegex()).toTypedArray())
             }
         } else {
-            result = Arrays.asList(*(pattern as Pattern).split(str, -1))
+            result = mutableListOf(*(pattern as Pattern).split(str, -1))
         }
         if (limit != null && limit.toInt() < result.size) {
             result = result.subList(0, limit.toInt())
@@ -1822,7 +1822,7 @@ object Functions {
         }
 
         val result: ArrayList<*> = ArrayList(arr)
-        Collections.reverse(result)
+        result.reverse()
         return result
     }
 
@@ -1946,7 +1946,7 @@ object Functions {
             val comp: Comparator<Any> = object : Comparator<Any> {
                 override fun compare(o1: Any, o2: Any): Int {
                     try {
-                        val swap = funcApply(comparator, Arrays.asList(o1, o2)) as Boolean
+                        val swap = funcApply(comparator, listOf(o1, o2)) as Boolean
                         return if (swap) 1
                         else -1
                     } catch (e: Throwable) {
@@ -1982,7 +1982,7 @@ object Functions {
         }
 
         val result: MutableList<*> = ArrayList(arr)
-        Collections.shuffle(result)
+        result.shuffle()
         return result
     }
 
@@ -2077,7 +2077,7 @@ object Functions {
             arg1 = createSequence(arg1)
         }
         if (arg2 !is List<*>) {
-            arg2 = Utils.JList(Arrays.asList(arg2))
+            arg2 = Utils.JList(listOf(arg2))
         }
 
         // else
@@ -2184,7 +2184,7 @@ object Functions {
         // i.e. a varargs fn like zip can use this
         if (nargs == 1 && types[0] == Utils.JList::class.java) {
             val allArgs: Utils.JList<*> = Utils.JList(args)
-            callArgs = java.util.List.of(allArgs)
+            callArgs = mutableListOf(allArgs)
         }
 
         /*

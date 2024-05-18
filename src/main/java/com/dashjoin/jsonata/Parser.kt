@@ -50,7 +50,7 @@ class Parser {
     private var symbolTable: HashMap<String, Symbol> = HashMap()
     private var errors: MutableList<Exception> = ArrayList()
 
-    fun remainingTokens(): List<Tokenizer.Token> {
+    private fun remainingTokens(): List<Tokenizer.Token> {
         val remaining: MutableList<Tokenizer.Token> = ArrayList()
         if (node!!.id != "(end)") {
             val t = Tokenizer.Token(node!!.type, node!!.value, node!!.position)
@@ -206,7 +206,7 @@ class Parser {
         }
     }
 
-    fun register(t: Symbol) {
+    private fun register(t: Symbol) {
         //if (t instanceof Infix || t instanceof InfixR) return;
 
         var s = symbolTable[t.id]
@@ -345,7 +345,7 @@ class Parser {
 
 
     internal inner class InfixAndPrefix(id: String?, bp: Int = 0) : Infix(id, bp), Cloneable {
-        var prefix: Prefix
+        private var prefix: Prefix
 
         init {
             prefix = Prefix(id)
@@ -390,7 +390,7 @@ class Parser {
     // if they make a tail call.  If so, it is replaced by a thunk which will
     // be invoked by the trampoline loop during function application.
     // This enables tail-recursive functions to be written without growing the stack
-    fun tailCallOptimize(expr: Symbol): Symbol {
+    private fun tailCallOptimize(expr: Symbol): Symbol {
         val result: Symbol
         if (expr.type == "function" && expr.predicate == null) {
             val thunk = Symbol()
@@ -423,9 +423,9 @@ class Parser {
         return result
     }
 
-    var ancestorLabel: Int = 0
-    var ancestorIndex: Int = 0
-    var ancestry: MutableList<Symbol> = ArrayList()
+    private var ancestorLabel: Int = 0
+    private var ancestorIndex: Int = 0
+    private var ancestry: MutableList<Symbol> = ArrayList()
 
     init {
         register(Terminal("(end)"))
@@ -802,7 +802,7 @@ class Parser {
         })
     }
 
-    fun seekParent(node: Symbol, slot: Symbol): Symbol {
+    private fun seekParent(node: Symbol, slot: Symbol): Symbol {
         var slot = slot
         when (node.type) {
             "name", "wildcard" -> {
@@ -848,7 +848,7 @@ class Parser {
     }
 
 
-    fun pushAncestry(result: Symbol, value: Symbol?) {
+    private fun pushAncestry(result: Symbol, value: Symbol?) {
         if (value == null) return  // Added NPE check
 
         if (value.seekingParent != null || value.type == "parent") {
@@ -864,7 +864,7 @@ class Parser {
         }
     }
 
-    fun resolveAncestry(path: Symbol) {
+    private fun resolveAncestry(path: Symbol) {
         var index = path.steps!!.size - 1
         val laststep = path.steps!![index]
         val slots: MutableList<Symbol> = if ((laststep.seekingParent != null)) laststep.seekingParent!! else ArrayList()
@@ -877,7 +877,7 @@ class Parser {
             while (slot.level > 0) {
                 if (index < 0) {
                     if (path.seekingParent == null) {
-                        path.seekingParent = ArrayList(Arrays.asList(slot))
+                        path.seekingParent = mutableListOf(slot)
                     } else {
                         path.seekingParent!!.add(slot)
                     }
@@ -900,7 +900,7 @@ class Parser {
     // This includes flattening the parts of the AST representing location paths,
     // converting them to arrays of steps which in turn may contain arrays of predicates.
     // following this, nodes containing '.' and '[' should be eliminated from the AST.
-    fun processAST(expr: Symbol?): Symbol? {
+    private fun processAST(expr: Symbol?): Symbol? {
         var result = expr
         if (expr == null) return null
         if (dbg) println(" > processAST type=" + expr.type + " value='" + expr.value + "'")
@@ -915,12 +915,12 @@ class Parser {
                         } else {
                             result = Infix(null)
                             result.type = "path"
-                            result.steps = ArrayList(Arrays.asList(lstep))
+                            result.steps = mutableListOf(lstep)
                             //result = {type: 'path', steps: [lstep]};
                         }
                         if (lstep.type == "parent") {
                             result.seekingParent = ArrayList(
-                                Arrays.asList(
+                                listOf(
                                     lstep.slot
                                 )
                             )
@@ -1017,7 +1017,7 @@ class Parser {
                             })
                             pushAncestry(step, predicate)
                         }
-                        val s: Symbol = Symbol()
+                        val s = Symbol()
                         s.type = "filter"
                         s.expr = predicate
                         s.position = expr.position
@@ -1268,7 +1268,7 @@ class Parser {
                 result.position = expr.position
                 // array of expressions - process each one
                 val __result = result
-                result.expressions = expr.expressions!!.stream().map<Symbol?> { item: Symbol? ->
+                result.expressions = expr.expressions!!.stream().map { item: Symbol? ->
                     val part = processAST(item)
                     pushAncestry(__result, part)
                     if (part!!.consarray || (part.type == "path" && part.steps!![0].consarray)) {

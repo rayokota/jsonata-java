@@ -301,7 +301,7 @@ object DateTimeUtils : Serializable {
         val letters = Vector<String>()
         val aCode = aChar[0]
         while (value > 0) {
-            letters.insertElementAt(Character.toString(((value - 1) % 26 + aCode.code).toChar()), 0)
+            letters.insertElementAt(((value - 1) % 26 + aCode.code).toChar().toString(), 0)
             value = (value - 1) / 26
         }
         return letters.stream().reduce("") { a: String, b: String -> a + b }
@@ -375,7 +375,7 @@ object DateTimeUtils : Serializable {
                         i--
                     }
                 } else {
-                    Collections.reverse(format.groupingSeparators)
+                    format.groupingSeparators.reverse()
                     for (separator in format.groupingSeparators) {
                         val pos = formattedInteger.length - separator!!.position
                         formattedInteger =

@@ -1370,7 +1370,7 @@ class Jsonata {
                 var _matches =  /* await */evaluate(expr!!.pattern, result, environment)
                 if (_matches != null) {
                     if (_matches !is List<*>) {
-                        _matches = ArrayList(java.util.List.of(_matches))
+                        _matches = mutableListOf(_matches)
                     }
                     val matches = _matches as List<*>
                     for (ii in matches.indices) {
@@ -1402,7 +1402,7 @@ class Jsonata {
                             if (deletions != null) {
                                 val `val`: Any = deletions
                                 if (deletions !is List<*>) {
-                                    deletions = ArrayList(java.util.List.of(deletions))
+                                    deletions = mutableListOf(deletions)
                                 }
                                 if (!isArrayOfStrings(deletions)) {
                                     // throw type error

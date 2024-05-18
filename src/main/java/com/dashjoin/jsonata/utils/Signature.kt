@@ -64,18 +64,18 @@ class Signature(signature: String, var functionName: String) : Serializable {
         }
     }
 
-    var _param: Param = Param()
+    private var _param: Param = Param()
 
     var _params: MutableList<Param> = ArrayList()
-    var _prevParam: Param = _param
-    var _regex: Pattern? = null
-    var _signature: String = ""
+    private var _prevParam: Param = _param
+    private var _regex: Pattern? = null
+    private var _signature: String = ""
 
     init {
         parseSignature(signature)
     }
 
-    fun findClosingBracket(str: String, start: Int, openSymbol: Char, closeSymbol: Char): Int {
+    private fun findClosingBracket(str: String, start: Int, openSymbol: Char, closeSymbol: Char): Int {
         // returns the position of the closing symbol (e.g. bracket) in a string
         // that balances the opening symbol at position start
         var depth = 1
@@ -96,7 +96,7 @@ class Signature(signature: String, var functionName: String) : Serializable {
         return position
     }
 
-    fun getSymbol(value: Any?): String {
+    private fun getSymbol(value: Any?): String {
         val symbol = if (value == null) {
             "m"
         } else {
@@ -129,7 +129,7 @@ class Signature(signature: String, var functionName: String) : Serializable {
      * signature - the signature between the <angle brackets>
      * @returns validation pattern
     </angle> */
-    fun parseSignature(signature: String): Pattern? {
+    private fun parseSignature(signature: String): Pattern? {
         // create a Regex that represents this signature and return a function that when
         // invoked,
         // returns the validated (possibly fixed-up) arguments, or throws a validation
@@ -248,7 +248,7 @@ class Signature(signature: String, var functionName: String) : Serializable {
         return _regex
     }
 
-    fun throwValidationError(badArgs: List<*>?, badSig: String?, functionName: String?) {
+    private fun throwValidationError(badArgs: List<*>?, badSig: String?, functionName: String?) {
         // to figure out where this went wrong we need apply each component of the
         // regex to each argument until we get to the one that fails to match
         var partialPattern: String? = "^"

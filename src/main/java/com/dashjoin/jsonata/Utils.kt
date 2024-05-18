@@ -61,7 +61,7 @@ object Utils {
         return o is JFunction || o is JFunctionCallable
     }
 
-    var NONE: Any = Any()
+    private var NONE: Any = Any()
 
     /**
      * Create an empty sequence to contain query results
@@ -208,7 +208,7 @@ object Utils {
     class RangeList(left: Long, right: Long) : AbstractList<Number?>() {
         val a: Long
         val b: Long
-        val _size: Int
+        private val _size: Int
 
         init {
             assert(left <= right)
