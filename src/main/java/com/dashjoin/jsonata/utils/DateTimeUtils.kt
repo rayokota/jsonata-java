@@ -132,7 +132,7 @@ object DateTimeUtils : Serializable {
             val factor = 10.0.pow((mag * 3).toDouble()).toLong()
             val mant = floor((num / factor).toDouble()).toInt()
             val remainder = num - mant * factor
-            words = (if (prev) ", " else "") + lookup(mant.toLong(), false, false) + " " + magnitudes[mag - 1]
+            words = (if (prev) ", " else "") + lookup(mant.toLong(), prev = false, ord = false) + " " + magnitudes[mag - 1]
             if (remainder > 0) {
                 words += lookup(remainder, true, ord)
             } else if (ord) {

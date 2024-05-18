@@ -1064,8 +1064,7 @@ object Functions {
         if (limit != null && limit.toInt() == 0) return result
 
         if (pattern is String) {
-            val sep = pattern
-            if (sep.isEmpty()) {
+            if (pattern.isEmpty()) {
                 // $split("str", ""): Split string into characters
                 val l = limit?.toInt() ?: Int.MAX_VALUE
                 var i = 0
@@ -1075,7 +1074,7 @@ object Functions {
                 }
             } else {
                 // Quote separator string + preserve trailing empty strings (-1)
-                result = mutableListOf(*str.split(Pattern.quote(sep).toRegex()).toTypedArray())
+                result = mutableListOf(*str.split(Pattern.quote(pattern).toRegex()).toTypedArray())
             }
         } else {
             result = mutableListOf(*(pattern as Pattern).split(str, -1))
@@ -1290,10 +1289,9 @@ object Functions {
         when (arg) {
             is Number -> result = arg
             is String -> {
-                val s = arg
-                result = if (s.startsWith("0x")) s.substring(2).toLong(16)
-                else if (s.startsWith("0B")) s.substring(2).toLong(2)
-                else if (s.startsWith("0O")) s.substring(2).toLong(8)
+                result = if (arg.startsWith("0x")) arg.substring(2).toLong(16)
+                else if (arg.startsWith("0B")) arg.substring(2).toLong(2)
+                else if (arg.startsWith("0O")) arg.substring(2).toLong(8)
                 else arg.toDouble()
             }
 
@@ -1459,11 +1457,10 @@ object Functions {
 
         var result = false
         if (arg is List<*>) {
-            val l = arg
-            if (l.size == 1) {
-                result = toBoolean(l[0])!!
-            } else if (l.size > 1) {
-                val truesLength = l.stream().filter { e: Any? -> Jsonata.boolize(e) }.count()
+            if (arg.size == 1) {
+                result = toBoolean(arg[0])!!
+            } else if (arg.size > 1) {
+                val truesLength = arg.stream().filter { e: Any? -> Jsonata.boolize(e) }.count()
                 result = truesLength > 0
             }
         } else if (arg is String) {
@@ -2125,10 +2122,9 @@ object Functions {
         // lookup the 'name' item in the input
         var result: Any? = null
         if (input is List<*>) {
-            val _input = input
             result = createSequence()
-            for (ii in _input.indices) {
-                val res = lookup(_input[ii], key)
+            for (ii in input.indices) {
+                val res = lookup(input[ii], key)
                 if (res != null) {
                     if (res is List<*>) {
                         (result as MutableList<Any>).addAll(res as List<Any>)
