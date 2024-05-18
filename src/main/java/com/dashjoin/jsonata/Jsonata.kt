@@ -500,7 +500,7 @@ class Jsonata {
             }
         } else {
             for (index in (input as List<*>).indices) {
-                val item = input[index]!!
+                val item = input[index]
                 var context: Any? = item
                 var env = environment
                 if (input is Utils.JList<*> && input.tupleStream) {
