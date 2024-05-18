@@ -126,7 +126,6 @@ class JsonParser(handler: JsonHandler<*, *>?) {
      * @throws ParseException
      * if the input is not valid JSON
      */
-    @JvmOverloads
     @Throws(IOException::class)
     fun parse(reader: Reader?, buffersize: Int = DEFAULT_BUFFER_SIZE) {
         if (reader == null) {

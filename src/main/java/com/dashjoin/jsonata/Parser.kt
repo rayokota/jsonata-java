@@ -210,7 +210,6 @@ class Parser {
         //class Symbol {
         constructor()
 
-        @JvmOverloads
         constructor(id: String?, bp: Int = 0) {
             this.id = id
             this.value = id
@@ -286,7 +285,6 @@ class Parser {
     }
 
     //}
-    @JvmOverloads
     fun advance(id: String? = null, infix: Boolean = false): Symbol {
         if (id != null && node!!.id != id) {
             val code = if (node!!.id == "(end)") {
@@ -379,7 +377,7 @@ class Parser {
     // match infix operators
     // <expression> <operator> <expression>
     // left associative
-    internal open inner class Infix @JvmOverloads constructor(id: String?, bp: Int = 0) :
+    internal open inner class Infix(id: String?, bp: Int = 0) :
         Symbol(id, (if (bp != 0) bp else (if (id != null) Tokenizer.operators[id] else 0))!!) {
         override fun led(left: Symbol): Symbol {
             lhs = left
@@ -390,7 +388,7 @@ class Parser {
     }
 
 
-    internal inner class InfixAndPrefix @JvmOverloads constructor(id: String?, bp: Int = 0) : Infix(id, bp), Cloneable {
+    internal inner class InfixAndPrefix(id: String?, bp: Int = 0) : Infix(id, bp), Cloneable {
         var prefix: Prefix
 
         init {

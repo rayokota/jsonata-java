@@ -68,7 +68,6 @@ object Utils {
      * @returns {Array} - empty sequence
      */
     @JvmStatic
-    @JvmOverloads
     fun createSequence(el: Any? = NONE): MutableList<Any?> {
         val sequence = JList<Any?>()
         sequence.sequence = true

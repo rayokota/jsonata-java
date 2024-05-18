@@ -652,17 +652,12 @@ object Functions {
         val res: MutableList<RegexpMatch> = ArrayList()
         val m = matcher!!.matcher(str)
         while (m.find()) {
-            val rm = RegexpMatch()
-
-            //System.out.println("grc="+m.groupCount()+" "+m.group(1));
-            rm.index = m.start()
-            rm.match = m.group()
-
             val groups: MutableList<String> = ArrayList()
+
             // Collect the groups
             for (g in 1..m.groupCount()) groups.add(m.group(g))
 
-            rm.groups = groups
+            val rm = RegexpMatch(m.group(), m.start(), groups)
             res.add(rm)
         }
         return res
@@ -2437,12 +2432,5 @@ object Functions {
         return t
     }
 
-    class RegexpMatch {
-        var match: String? = null
-        var index: Int = 0
-        var groups: List<String>? = null
-        override fun toString(): String {
-            return "regexpMatch $match idx=$index groups=$groups"
-        }
-    }
+    data class RegexpMatch(val match: String?, val index: Int, val groups: List<String>?)
 }

@@ -21,7 +21,7 @@ package com.dashjoin.jsonata
  * Configure max runtime / max recursion depth.
  * See Frame.setRuntimeBounds - usually not used directly
  */
-class Timebox @JvmOverloads constructor(expr: Jsonata.Frame, timeout: Long = 5000L, maxDepth: Int = 100) {
+class Timebox(expr: Jsonata.Frame, timeout: Long = 5000L, maxDepth: Int = 100) {
     var timeout: Long = 5000L
     var maxDepth: Int = 100
 

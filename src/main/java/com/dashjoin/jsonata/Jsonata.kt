@@ -971,10 +971,7 @@ class Jsonata {
         return result
     }
 
-    internal class GroupEntry {
-        var data: Any? = null
-        var exprIndex: Int = 0
-    }
+    internal data class GroupEntry(var data: Any? = null, var exprIndex: Int = 0)
 
     /**
      * Evaluate group expression against input data
@@ -1016,9 +1013,7 @@ class Jsonata {
                 }
 
                 if (key != null) {
-                    val entry = GroupEntry()
-                    entry.data = item
-                    entry.exprIndex = pairIndex
+                    val entry = GroupEntry(item, pairIndex)
                     if (groups[key] != null) {
                         // a value already exists in this slot
                         if (groups[key]!!.exprIndex != pairIndex) {
