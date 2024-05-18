@@ -136,7 +136,7 @@ class Parser {
         // Ancestor attributes
         var label: String? = null
         var index: Any? = null
-        var _jsonata_lambda: Boolean = false
+        var _jsonataLambda: Boolean = false
         var ancestor: Symbol? = null
 
 
@@ -257,15 +257,15 @@ class Parser {
             )
             return handleError(err)
         }
-        val next_token = lexer!!.next(infix)
-        if (dbg) println("nextToken " + (next_token?.type))
-        if (next_token == null) {
+        val nextToken = lexer!!.next(infix)
+        if (dbg) println("nextToken " + (nextToken?.type))
+        if (nextToken == null) {
             node = symbolTable["(end)"]
             node!!.position = source!!.length
             return node!!
         }
-        val value = next_token.value
-        var type = next_token.type
+        val value = nextToken.value
+        var type = nextToken.type
         val symbol: Symbol?
         when (type) {
             "name", "variable" -> symbol = symbolTable["(name)"]
@@ -274,7 +274,7 @@ class Parser {
                 if (symbol == null) {
                     return handleError(
                         JException(
-                            "S0204", next_token.position, value
+                            "S0204", nextToken.position, value
                         )
                     )
                 }
@@ -288,7 +288,7 @@ class Parser {
 
             else -> return handleError(
                 JException(
-                    "S0205", next_token.position, value
+                    "S0205", nextToken.position, value
                 )
             )
         }
@@ -296,7 +296,7 @@ class Parser {
         //Token node = new Token(); //Object.create(symbol);
         node!!.value = value
         node!!.type = type
-        node!!.position = next_token.position
+        node!!.position = nextToken.position
         if (dbg) println("advance $node")
         return node!!
     }
@@ -1065,19 +1065,19 @@ class Parser {
                         // RHS defines the terms
                         result = processAST(expr.lhs)
                         if (result!!.type != "path") {
-                            val _res: Symbol = Symbol()
+                            val _res = Symbol()
                             _res.type = "path"
                             _res.steps = ArrayList()
                             _res.steps!!.add(result)
                             result = _res
                         }
-                        val sortStep: Symbol = Symbol()
+                        val sortStep = Symbol()
                         sortStep.type = "sort"
                         sortStep.position = expr.position
                         sortStep.terms = expr.rhsTerms!!.stream().map { terms: Symbol ->
                             val expression = processAST(terms.expression)
                             pushAncestry(sortStep, expression)
-                            val res: Symbol = Symbol()
+                            val res = Symbol()
                             res.descending = terms.descending
                             res.expression = expression
                             res
@@ -1130,7 +1130,7 @@ class Parser {
                         if (result!!.type == "path") {
                             step = result.steps!![result.steps!!.size - 1]
                         } else {
-                            val _res: Symbol = Symbol()
+                            val _res = Symbol()
                             _res.type = "path"
                             _res.steps = ArrayList()
                             _res.steps!!.add(result)
@@ -1143,7 +1143,7 @@ class Parser {
                         if (step.stages == null) {
                             step.index = expr.rhs!!.value // name of index variable = String
                         } else {
-                            val _res: Symbol = Symbol()
+                            val _res = Symbol()
                             _res.type = "index"
                             _res.value = expr.rhs!!.value
                             _res.position = expr.position
@@ -1271,12 +1271,12 @@ class Parser {
                 result.type = expr.type
                 result.position = expr.position
                 // array of expressions - process each one
-                val __result = result
+                val _result = result
                 result.expressions = expr.expressions!!.stream().map { item: Symbol? ->
                     val part = processAST(item)
-                    pushAncestry(__result, part)
+                    pushAncestry(_result, part)
                     if (part!!.consarray || (part.type == "path" && part.steps!![0].consarray)) {
-                        __result.consarray = true
+                        _result.consarray = true
                     }
                     part
                 }.collect(Collectors.toList())

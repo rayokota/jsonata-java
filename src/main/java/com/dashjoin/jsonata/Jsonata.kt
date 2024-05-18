@@ -1747,7 +1747,7 @@ class Jsonata {
         // make a Object (closure)
         val procedure = parser!!.Symbol()
 
-        procedure._jsonata_lambda = true
+        procedure._jsonataLambda = true
         procedure.input = input
         procedure.environment = environment
         procedure.arguments = expr!!.arguments
@@ -1874,7 +1874,7 @@ class Jsonata {
             }
         }
         val procedure = parser!!.Symbol()
-        procedure._jsonata_lambda = true
+        procedure._jsonataLambda = true
         procedure.input = proc.input
         procedure.environment = env
         procedure.arguments = unboundArgs
@@ -2191,19 +2191,19 @@ class Jsonata {
             throw JException("S0500", 0)
         }
 
-        val exec_env: Frame
+        val execEnv: Frame
         if (bindings != null) {
             //var exec_env;
             // the variable bindings have been passed in - create a frame to hold these
-            exec_env = createFrame(environment)
+            execEnv = createFrame(environment)
             for (v in bindings.bindings.keys) {
-                exec_env.bind(v, bindings.lookup(v)!!)
+                execEnv.bind(v, bindings.lookup(v)!!)
             }
         } else {
-            exec_env = environment
+            execEnv = environment
         }
         // put the input document into the environment as the root object
-        exec_env.bind("$", input)
+        execEnv.bind("$", input)
 
         // capture the timestamp and put it in the execution environment
         // the $now() and $millis() functions will return this value - whenever it is called
@@ -2221,7 +2221,7 @@ class Jsonata {
 
         var it: Any?
         try {
-            it =  /* await */evaluate(ast, input, exec_env)
+            it =  /* await */evaluate(ast, input, execEnv)
             //  if (typeof callback === "function") {
             //      callback(null, it);
             //  }

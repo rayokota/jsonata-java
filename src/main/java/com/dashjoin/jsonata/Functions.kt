@@ -1519,17 +1519,17 @@ object Functions {
      */
     @JvmStatic
     fun hofFuncArgs(func: Any?, arg1: Any?, arg2: Any?, arg3: Any?): List<*> {
-        val func_args: MutableList<Any?> = ArrayList<Any?>()
-        func_args.add(arg1) // the first arg (the value) is required
+        val funcArgs: MutableList<Any?> = ArrayList<Any?>()
+        funcArgs.add(arg1) // the first arg (the value) is required
         // the other two are optional - only supply it if the function can take it
         val length = getFunctionArity(func)
         if (length >= 2) {
-            func_args.add(arg2)
+            funcArgs.add(arg2)
         }
         if (length >= 3) {
-            func_args.add(arg3)
+            funcArgs.add(arg3)
         }
-        return func_args
+        return funcArgs
     }
 
     /**
@@ -2111,7 +2111,7 @@ object Functions {
 
     @JvmStatic
     fun isLambda(result: Any?): Boolean {
-        return (result is Parser.Symbol && result._jsonata_lambda)
+        return (result is Parser.Symbol && result._jsonataLambda)
     }
 
     /**

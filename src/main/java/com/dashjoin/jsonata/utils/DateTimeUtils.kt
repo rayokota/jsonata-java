@@ -329,26 +329,26 @@ object DateTimeUtils : Serializable {
         val negative = value < 0
         value = abs(value.toDouble()).toLong()
         when (format!!.primary) {
-            formats.LETTERS -> formattedInteger =
-                decimalToLetters(value.toInt(), if (format.case_type == tcase.UPPER) "A" else "a")
+            Formats.LETTERS -> formattedInteger =
+                decimalToLetters(value.toInt(), if (format.caseType == TCase.UPPER) "A" else "a")
 
-            formats.ROMAN -> {
+            Formats.ROMAN -> {
                 formattedInteger = decimalToRoman(value.toInt())
-                if (format.case_type == tcase.UPPER) {
+                if (format.caseType == TCase.UPPER) {
                     formattedInteger = formattedInteger.uppercase(Locale.getDefault())
                 }
             }
 
-            formats.WORDS -> {
+            Formats.WORDS -> {
                 formattedInteger = numberToWords(value, format.ordinal)
-                if (format.case_type == tcase.UPPER) {
+                if (format.caseType == TCase.UPPER) {
                     formattedInteger = formattedInteger.uppercase(Locale.getDefault())
-                } else if (format.case_type == tcase.LOWER) {
+                } else if (format.caseType == TCase.LOWER) {
                     formattedInteger = formattedInteger.lowercase(Locale.getDefault())
                 }
             }
 
-            formats.DECIMAL -> {
+            Formats.DECIMAL -> {
                 formattedInteger = "" + value
                 val padLength = format.mandatoryDigits - formattedInteger.length
                 if (padLength > 0) {
@@ -393,7 +393,7 @@ object DateTimeUtils : Serializable {
                 }
             }
 
-            formats.SEQUENCE -> throw RuntimeException(
+            Formats.SEQUENCE -> throw RuntimeException(
                 String.format(
                     Constants.ERR_MSG_SEQUENCE_UNSUPPORTED,
                     format.token
@@ -465,28 +465,28 @@ object DateTimeUtils : Serializable {
 
         when (primaryFormat) {
             "A" -> {
-                format.case_type = tcase.UPPER
-                format.primary = formats.LETTERS
+                format.caseType = TCase.UPPER
+                format.primary = Formats.LETTERS
             }
 
-            "a" -> format.primary = formats.LETTERS
+            "a" -> format.primary = Formats.LETTERS
             "I" -> {
-                format.case_type = tcase.UPPER
-                format.primary = formats.ROMAN
+                format.caseType = TCase.UPPER
+                format.primary = Formats.ROMAN
             }
 
-            "i" -> format.primary = formats.ROMAN
+            "i" -> format.primary = Formats.ROMAN
             "W" -> {
-                format.case_type = tcase.UPPER
-                format.primary = formats.WORDS
+                format.caseType = TCase.UPPER
+                format.primary = Formats.WORDS
             }
 
             "Ww" -> {
-                format.case_type = tcase.TITLE
-                format.primary = formats.WORDS
+                format.caseType = TCase.TITLE
+                format.primary = Formats.WORDS
             }
 
-            "w" -> format.primary = formats.WORDS
+            "w" -> format.primary = Formats.WORDS
             else -> {
                 var zeroCode: Int? = null
                 var mandatoryDigits = 0
@@ -526,7 +526,7 @@ object DateTimeUtils : Serializable {
                     ix--
                 }
                 if (mandatoryDigits > 0) {
-                    format.primary = formats.DECIMAL
+                    format.primary = Formats.DECIMAL
                     format.zeroCode = zeroCode!!
                     format.mandatoryDigits = mandatoryDigits
                     format.optionalDigits = optionalDigits
@@ -545,7 +545,7 @@ object DateTimeUtils : Serializable {
                         format.groupingSeparators = groupingSeparators
                     }
                 } else {
-                    format.primary = formats.SEQUENCE
+                    format.primary = Formats.SEQUENCE
                     format.token = primaryFormat
                 }
             }
@@ -670,12 +670,12 @@ object DateTimeUtils : Serializable {
                     throw RuntimeException(String.format(Constants.ERR_MSG_UNKNOWN_COMPONENT_SPECIFIER, def.component))
                 }
                 if (def.presentation1!![0] == 'n') {
-                    def.names = tcase.LOWER
+                    def.names = TCase.LOWER
                 } else if (def.presentation1!![0] == 'N') {
                     if (def.presentation1!!.length > 1 && def.presentation1!![1] == 'n') {
-                        def.names = tcase.TITLE
+                        def.names = TCase.TITLE
                     } else {
-                        def.names = tcase.UPPER
+                        def.names = TCase.UPPER
                     }
                 } else if ("YMDdFWwXxHhmsf".indexOf(def.component) != -1) {
                     var integerPattern = def.presentation1
@@ -808,9 +808,9 @@ object DateTimeUtils : Serializable {
                         )
                     }
                 }
-                if (markerSpec.names == tcase.UPPER) {
+                if (markerSpec.names == TCase.UPPER) {
                     componentValue = componentValue.uppercase(Locale.getDefault())
-                } else if (markerSpec.names == tcase.LOWER) {
+                } else if (markerSpec.names == TCase.LOWER) {
                     componentValue = componentValue.lowercase(Locale.getDefault())
                 }
                 markerSpec.width?.second?.let {
@@ -853,7 +853,7 @@ object DateTimeUtils : Serializable {
             // §9.8.4.7 Formatting Other Components
             // Formatting P for am/pm
             // getDateTimeFragment() always returns am/pm lower case so check for UPPER here
-            if (markerSpec.names == tcase.UPPER) {
+            if (markerSpec.names == TCase.UPPER) {
                 componentValue = componentValue.uppercase(Locale.getDefault())
             }
         }
@@ -1128,9 +1128,9 @@ object DateTimeUtils : Serializable {
 
     private fun generateRegex(component: Char, formatSpec: Format?): MatcherPart {
         val matcher: MatcherPart
-        val isUpper = formatSpec!!.case_type == tcase.UPPER
+        val isUpper = formatSpec!!.caseType == TCase.UPPER
         when (formatSpec.primary) {
-            formats.LETTERS -> {
+            Formats.LETTERS -> {
                 val regex = if (isUpper) "[A-Z]+" else "[a-z]+"
                 matcher = object : MatcherPart(regex) {
                     override fun parse(value: String): Int {
@@ -1139,7 +1139,7 @@ object DateTimeUtils : Serializable {
                 }
             }
 
-            formats.ROMAN -> {
+            Formats.ROMAN -> {
                 val regex = if (isUpper) "[MDCLXVI]+" else "[mdclxvi]+"
                 matcher = object : MatcherPart(regex) {
                     override fun parse(value: String): Int {
@@ -1148,7 +1148,7 @@ object DateTimeUtils : Serializable {
                 }
             }
 
-            formats.WORDS -> {
+            Formats.WORDS -> {
                 val words: MutableSet<String> = HashSet()
                 words.addAll(wordValues.keys)
                 words.add("and")
@@ -1161,7 +1161,7 @@ object DateTimeUtils : Serializable {
                 }
             }
 
-            formats.DECIMAL -> {
+            Formats.DECIMAL -> {
                 var regex = "[0-9]+"
                 when (component) {
                     'Y' -> {
@@ -1210,7 +1210,7 @@ object DateTimeUtils : Serializable {
                 }
             }
 
-            formats.SEQUENCE -> {
+            Formats.SEQUENCE -> {
                 throw RuntimeException(Constants.ERR_MSG_SEQUENCE_UNSUPPORTED)
             }
 
@@ -1233,19 +1233,19 @@ object DateTimeUtils : Serializable {
 
     private class RomanNumeral(val value: Int, val letters: String)
 
-    internal enum class formats(var value: String) {
+    internal enum class Formats(var value: String) {
         DECIMAL("decimal"), LETTERS("letters"), ROMAN("roman"), WORDS("words"), SEQUENCE("sequence")
     }
 
-    internal enum class tcase(var value: String) {
+    internal enum class TCase(var value: String) {
         UPPER("upper"), LOWER("lower"), TITLE("title")
     }
 
     private class Format {
         @Suppress("unused")
         var type: String = "integer"
-        var primary: formats = formats.DECIMAL
-        var case_type: tcase = tcase.LOWER
+        var primary: Formats = Formats.DECIMAL
+        var caseType: TCase = TCase.LOWER
         var ordinal: Boolean = false
         var zeroCode: Int = 0
         var mandatoryDigits: Int = 0
@@ -1283,7 +1283,7 @@ object DateTimeUtils : Serializable {
         var presentation1: String? = null
         var presentation2: Char? = null
         var ordinal: Boolean = false
-        var names: tcase? = null
+        var names: TCase? = null
         var integerFormat: Format? = null
         var n: Int = 0
 
