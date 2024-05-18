@@ -35,7 +35,7 @@ import kotlin.math.min
 class JsonParser(handler: JsonHandler<*, *>?) {
     private val handler: JsonHandler<Any?, Any?>
     private var reader: Reader? = null
-    private var buffer: CharArray = CharArray(0);
+    private var buffer: CharArray = CharArray(0)
     private var bufferOffset = 0
     private var index = 0
     private var fill = 0

@@ -679,7 +679,7 @@ object DateTimeUtils : Serializable {
                     }
                 } else if ("YMDdFWwXxHhmsf".indexOf(def.component) != -1) {
                     var integerPattern = def.presentation1
-                    if (def.presentation2 == null) {
+                    if (def.presentation2 != null) {
                         integerPattern += ";" + def.presentation2
                     }
                     def.integerFormat = analyseIntegerPicture(integerPattern)
@@ -744,7 +744,7 @@ object DateTimeUtils : Serializable {
     private var iso8601Spec: PictureFormat? = null
 
     @JvmStatic
-    fun formatDateTime(millis: Long, picture: String?, timezone: String?): String? {
+    fun formatDateTime(millis: Long, picture: String?, timezone: String?): String {
         var offsetHours = 0
         var offsetMinutes = 0
 

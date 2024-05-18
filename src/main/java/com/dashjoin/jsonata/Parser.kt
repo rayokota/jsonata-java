@@ -396,7 +396,7 @@ class Parser {
             val thunk = Symbol()
             thunk.type = "lambda"
             thunk.thunk = true
-            thunk.arguments = mutableListOf<Symbol>()
+            thunk.arguments = mutableListOf()
             thunk.position = expr.position
             thunk.body = expr
             result = thunk
@@ -671,7 +671,7 @@ class Parser {
                 advance("(")
                 val terms: MutableList<Symbol> = ArrayList()
                 while (true) {
-                    val term: Symbol = Symbol()
+                    val term = Symbol()
                     term.descending = false
 
                     if (node!!.id == "<") {
@@ -961,7 +961,7 @@ class Parser {
 
 
                         // any step that signals keeping a singleton array, should be flagged on the path
-                        if (result.steps!!.stream().filter { step: Symbol -> step.keepArray == true }
+                        if (result.steps!!.stream().filter { step: Symbol -> step.keepArray }
                                 .count() > 0) {
                             result.keepSingletonArray = true
                         }
@@ -1275,7 +1275,7 @@ class Parser {
                         __result.consarray = true
                     }
                     part
-                }.collect(Collectors.toList<Symbol?>())
+                }.collect(Collectors.toList())
             }
 
             "name" -> {

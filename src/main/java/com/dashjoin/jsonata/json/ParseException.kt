@@ -35,35 +35,4 @@ class ParseException internal constructor(
      * @return the error location
      */
     val location: Location
-) : RuntimeException(
-    "$message at $location"
-) {
-    @get:Deprecated("Use {@link #getLocation()} instead")
-    val offset: Int
-        /**
-         * Returns the absolute character index at which the error occurred. The offset of the first
-         * character of a document is 0.
-         *
-         * @return the character offset at which the error occurred, will be &gt;= 0
-         */
-        get() = location.offset
-
-    @get:Deprecated("Use {@link #getLocation()} instead")
-    val line: Int
-        /**
-         * Returns the line number in which the error occurred. The number of the first line is 1.
-         *
-         * @return the line in which the error occurred, will be &gt;= 1
-         */
-        get() = location.line
-
-    @get:Deprecated("Use {@link #getLocation()} instead")
-    val column: Int
-        /**
-         * Returns the column number at which the error occurred, i.e. the number of the character in its
-         * line. The number of the first character of a line is 1.
-         *
-         * @return the column in which the error occurred, will be &gt;= 1
-         */
-        get() = location.column
-}
+) : RuntimeException("$message at $location")

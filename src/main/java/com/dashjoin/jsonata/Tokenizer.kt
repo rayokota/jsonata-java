@@ -128,7 +128,7 @@ class Tokenizer internal constructor(// Tokenizer (lexer) - invoked by the parse
             return next(prefix) // need this to swallow any following whitespace
         }
         // test for regex
-        if (prefix != true && currentChar == '/') {
+        if (!prefix && currentChar == '/') {
             position++
             return create("regex", scanRegex())
         }

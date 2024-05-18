@@ -418,7 +418,7 @@ class Jsonata {
         var stepEnv = environment
         if (tupleBindings == null) {
             tupleBindings = input!!.stream().filter { item: Any? -> item != null }.map(
-                Function { item: Any? -> java.util.Map.of("@", item) })
+                { item: Any? -> java.util.Map.of("@", item) })
                 .collect(Collectors.toList<Any>()) as List<Map<String, Any>>
         }
 
@@ -435,7 +435,7 @@ class Jsonata {
                     res = _res as MutableList<*>
                 }
                 for (bb in res.indices) {
-                    val tuple: MutableMap<Any, Any> = LinkedHashMap<Any, Any>()
+                    val tuple: MutableMap<Any, Any> = LinkedHashMap()
                     tuple.putAll(tupleBindings[ee])
                     //Object.assign(tuple, tupleBindings[ee]);
                     if ((res is Utils.JList<*>) && res.tupleStream) {
@@ -488,7 +488,7 @@ class Jsonata {
             var index = (predicate.value as Number?)!!.toInt() // round it down - was Math.floor
             if (index < 0) {
                 // count in from end of array
-                index = (input as List<*>).size + index
+                index += (input as List<*>).size
             }
             val item = if (index < (input as List<*>).size) input[index] else null
             if (item != null) {
@@ -517,7 +517,7 @@ class Jsonata {
                         var ii = (ires as Number).toInt() // Math.floor(ires);
                         if (ii < 0) {
                             // count in from end of array
-                            ii = input.size + ii
+                            ii += input.size
                         }
                         if (ii == index) {
                             results.add(item)
@@ -661,7 +661,7 @@ class Jsonata {
      * @param {Object} input - Input data to evaluate against
      * @returns {*} Evaluated input data
      */
-    fun evaluateWildcard(expr: Parser.Symbol?, input: Any?): Any? {
+    fun evaluateWildcard(expr: Parser.Symbol?, input: Any?): Any {
         var input = input
         var results: MutableList<Any?> = createSequence()
         if ((input is Utils.JList<*>) && input.outerWrapper && (input.size > 0)) {
@@ -706,7 +706,7 @@ class Jsonata {
     fun flatten(arg: Any, flattened: MutableList<Any>?): Any {
         var flattened = flattened
         if (flattened == null) {
-            flattened = ArrayList<Any>()
+            flattened = ArrayList()
         }
         if (arg is List<*>) {
             for (item in arg) {
@@ -888,10 +888,10 @@ class Jsonata {
         val _lhs = lhs as Comparable<Any>
 
         when (op) {
-            "<" -> result = _lhs.compareTo(rhs) < 0
-            "<=" -> result = _lhs.compareTo(rhs) <= 0 //lhs <= rhs;
-            ">" -> result = _lhs.compareTo(rhs) > 0 // lhs > rhs;
-            ">=" -> result = _lhs.compareTo(rhs) >= 0 // lhs >= rhs;
+            "<" -> result = _lhs < rhs
+            "<=" -> result = _lhs <= rhs //lhs <= rhs;
+            ">" -> result = _lhs > rhs // lhs > rhs;
+            ">=" -> result = _lhs >= rhs // lhs >= rhs;
         }
         return result
     }
@@ -985,7 +985,7 @@ class Jsonata {
         var _input = _input
         val result = LinkedHashMap<Any, Any>()
         val groups = LinkedHashMap<Any, GroupEntry?>()
-        val reduce = if ((_input is Utils.JList<*>) && _input.tupleStream) true else false
+        val reduce = (_input is Utils.JList<*>) && _input.tupleStream
         // group the input sequence by "key" expression
         if (_input !is List<*>) {
             _input = createSequence(_input)
@@ -1241,7 +1241,7 @@ class Jsonata {
 
         // evaluate the lhs, then sort the results in order according to rhs expression
         val lhs = input as List<*>?
-        val isTupleSort = if ((input is Utils.JList<*> && input.tupleStream)) true else false
+        val isTupleSort = (input is Utils.JList<*> && input.tupleStream)
 
         // sort the lhs array
         // use comparator function
@@ -1321,12 +1321,12 @@ class Jsonata {
                         // both the same - move on to next term
                         index++
                         continue
-                    } else if ((aa as Comparable<Any>).compareTo(bb) < 0) {
+                    } else if ((aa as Comparable<Any>) < bb) {
                         -1
                     } else {
                         1
                     }
-                    if (term.descending == true) {
+                    if (term.descending) {
                         comp = -comp
                     }
                     index++
@@ -1469,12 +1469,12 @@ class Jsonata {
                 // this is Object chaining (func1 ~> func2)
                 // λ($f, $g) { λ($x){ $g($f($x)) } }
                 val chain =  /* await */evaluate(chainAST(), null, environment)
-                val args: MutableList<Any> = ArrayList<Any>()
+                val args: MutableList<Any> = ArrayList()
                 args.add(lhs)
                 args.add(func!!) // == [lhs, func]
                 result =  /* await */apply(chain, args, null, environment)
             } else {
-                val args: MutableList<Any> = ArrayList<Any>()
+                val args: MutableList<Any> = ArrayList()
                 args.add(lhs) // == [lhs]
                 result =  /* await */apply(func, args, null, environment)
             }
@@ -1608,7 +1608,7 @@ class Jsonata {
     /* async */
     fun apply(proc: Any?, args: Any?, input: Any?, environment: Any?): Any? {
         var result =  /* await */applyInner(proc, args, input, environment)
-        while (isLambda(result) && (result as Parser.Symbol?)!!.thunk == true) {
+        while (isLambda(result) && (result as Parser.Symbol?)!!.thunk) {
             // trampoline loop - this gets invoked as a result of tail-call optimization
             // the Object returned a tail-call thunk
             // unpack it, evaluate its arguments, and apply the tail call
@@ -1704,7 +1704,7 @@ class Jsonata {
                         (proc as Fn2<Any?, Any?, Any?>).apply(if (_args!!.size <= 0) null else _args[0], if (_args.size <= 1) null else _args[1])
                 }
             } else if (proc is Pattern) {
-                val _res: MutableList<Any> = ArrayList<Any>()
+                val _res: MutableList<Any> = ArrayList()
                 for (s in (validatedArgs as List<String>)) {
                     //System.err.println("PAT "+proc+" input "+s);
                     if (proc.matcher(s).find()) {
@@ -1749,7 +1749,7 @@ class Jsonata {
         procedure.signature = expr.signature
         procedure.body = expr.body
 
-        if (expr.thunk == true) procedure.thunk = true
+        if (expr.thunk) procedure.thunk = true
 
 
         // procedure.apply = /* async */ function(self, args) {
@@ -1895,8 +1895,8 @@ class Jsonata {
         //var body = "function($a,$c) { $substring($a,0,$c) }";
 
 
-        val sigArgs: MutableList<String> = ArrayList<String>()
-        val partArgs: MutableList<Any> = ArrayList<Any>()
+        val sigArgs: MutableList<String> = ArrayList()
+        val partArgs: MutableList<Any> = ArrayList()
         for (i in 0 until _native!!.numberOfArgs) {
             val argName = "$" + ('a'.code + i).toChar()
             sigArgs.add(argName)
@@ -2319,7 +2319,7 @@ class Jsonata {
             }
         }
 
-        fun <A, R> function(name: String?, func: Fn0<R>, signature: String?): JFunction {
+        fun <R> function(name: String?, func: Fn0<R>, signature: String?): JFunction {
             return JFunction(toJFunctionCallable(func), signature)
         }
 

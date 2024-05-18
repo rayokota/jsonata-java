@@ -258,7 +258,7 @@ class Signature(signature: String, var functionName: String) : Serializable {
             partialPattern += _params[index].regex
             val tester = Pattern.compile(partialPattern)
             val match = tester.matcher(badSig)
-            if (match.matches() == false) {
+            if (!match.matches()) {
                 // failed here
                 throw JException("T0410", -1, (goodTo + 1), functionName)
             }

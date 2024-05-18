@@ -17,7 +17,6 @@
  */
 package com.dashjoin.jsonata
 
-import com.dashjoin.jsonata.JException
 import com.dashjoin.jsonata.Jsonata.JFunction
 import com.dashjoin.jsonata.Utils.RangeList
 import com.dashjoin.jsonata.Utils.checkUrl
@@ -208,9 +207,9 @@ object Functions {
 
         if (arg is Map<*, *>) {
             b.append('{')
-            if (prettify == true) b.append('\n')
+            if (prettify) b.append('\n')
             for ((key, v) in (arg as Map<String?, Any>)) {
-                if (prettify == true) {
+                if (prettify) {
                     b.append(indent)
                     b.append("  ")
                 }
@@ -218,7 +217,7 @@ object Functions {
                 b.append(key)
                 b.append('"')
                 b.append(':')
-                if (prettify == true) b.append(' ')
+                if (prettify) b.append(' ')
                 if (v is String || v is Parser.Symbol
                     || v is JFunction
                 ) {
@@ -227,10 +226,10 @@ object Functions {
                     b.append('"')
                 } else string(b, v, prettify, "$indent  ")
                 b.append(',')
-                if (prettify == true) b.append('\n')
+                if (prettify) b.append('\n')
             }
-            if (!(arg as Map<*, *>).isEmpty()) b.deleteCharAt(b.length - (if (prettify == true) 2 else 1))
-            if (prettify == true) b.append(indent)
+            if (!(arg as Map<*, *>).isEmpty()) b.deleteCharAt(b.length - (if (prettify) 2 else 1))
+            if (prettify) b.append(indent)
             b.append('}')
             return
         }
@@ -241,9 +240,9 @@ object Functions {
                 return
             }
             b.append('[')
-            if (prettify == true) b.append('\n')
+            if (prettify) b.append('\n')
             for (v in arg) {
-                if (prettify == true) {
+                if (prettify) {
                     b.append(indent)
                     b.append("  ")
                 }
@@ -253,10 +252,10 @@ object Functions {
                     b.append('"')
                 } else string(b, v, prettify, "$indent  ")
                 b.append(',')
-                if (prettify == true) b.append('\n')
+                if (prettify) b.append('\n')
             }
-            if (!arg.isEmpty()) b.deleteCharAt(b.length - (if (prettify == true) 2 else 1))
-            if (prettify == true) b.append(indent)
+            if (!arg.isEmpty()) b.deleteCharAt(b.length - (if (prettify) 2 else 1))
+            if (prettify) b.append(indent)
             b.append(']')
             return
         }
@@ -1756,11 +1755,7 @@ object Functions {
      */
     @JvmStatic
     fun exists(arg: Any?): Boolean {
-        return if (arg == null) {
-            false
-        } else {
-            true
-        }
+        return arg != null
     }
 
     /**
@@ -1964,7 +1959,7 @@ object Functions {
             if (comparator is Comparator<*>) result.sortWith(comparator as Comparator<Any>)
             else result.sortWith(comp)
         } else {
-            result.sortWith(Comparator { o1: Any, o2: Any -> (o1 as Comparable<Any>).compareTo(o2) })
+            result.sortWith({ o1: Any, o2: Any -> (o1 as Comparable<Any>).compareTo(o2) })
         }
 
         return result
