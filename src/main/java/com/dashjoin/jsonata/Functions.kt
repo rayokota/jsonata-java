@@ -1959,7 +1959,7 @@ object Functions {
             if (comparator is Comparator<*>) result.sortWith(comparator as Comparator<Any>)
             else result.sortWith(comp)
         } else {
-            result.sortWith({ o1: Any, o2: Any -> (o1 as Comparable<Any>).compareTo(o2) })
+            result.sortWith { o1: Any, o2: Any -> (o1 as Comparable<Any>).compareTo(o2) }
         }
 
         return result

@@ -400,9 +400,9 @@ class Jsonata {
                 result = createSequence()
                 (result as Utils.JList<*>).tupleStream = true
                 for (ss in sorted!!.indices) {
-                    val tuple = java.util.Map.of(
-                        "@", sorted[ss],
-                        expr.index, ss
+                    val tuple = mapOf(
+                        "@" to sorted[ss],
+                         expr.index to ss
                     )
                     result.add(tuple)
                 }
@@ -417,8 +417,9 @@ class Jsonata {
         (result as Utils.JList<*>).tupleStream = true
         var stepEnv = environment
         if (tupleBindings == null) {
-            tupleBindings = input!!.stream().filter { item: Any? -> item != null }.map(
-                { item: Any? -> java.util.Map.of("@", item) })
+            tupleBindings = input!!.stream().filter { item: Any? -> item != null }.map { item: Any? ->
+                mapOf("@" to item)
+            }
                 .collect(Collectors.toList<Any>()) as List<Map<String, Any>>
         }
 
