@@ -96,7 +96,7 @@ object Functions {
     @JvmStatic
     fun max(args: List<Number>?): Number? {
         // undefined inputs always return undefined
-        if (args == null || args.isEmpty()) {
+        if (args.isNullOrEmpty()) {
             return null
         }
 
@@ -113,7 +113,7 @@ object Functions {
     @JvmStatic
     fun min(args: List<Number>?): Number? {
         // undefined inputs always return undefined
-        if (args == null || args.isEmpty()) {
+        if (args.isNullOrEmpty()) {
             return null
         }
 
@@ -130,7 +130,7 @@ object Functions {
     @JvmStatic
     fun average(args: List<Number>?): Number? {
         // undefined inputs always return undefined
-        if (args == null || args.isEmpty()) {
+        if (args.isNullOrEmpty()) {
             return null
         }
 
@@ -554,7 +554,7 @@ object Functions {
      * Pad a string to a minimum width by adding characters to the start or end
      * @param {string} str - string to be padded
      * @param {number} width - the minimum width; +ve pads to the right, -ve pads to the left
-     * @param {string} [char] - the pad character(s); defaults to ' '
+     * @param {string} char - the pad character(s); defaults to ' '
      * @returns {string} - padded string
      */
     @JvmStatic
@@ -777,7 +777,7 @@ object Functions {
      *
      * @param s
      * @param pattern
-     * @param replacement
+     * @param _replacement
      * @return
      */
     private fun safeReplaceAll(s: String?, pattern: Pattern, _replacement: Any?): String? {
@@ -1246,7 +1246,7 @@ object Functions {
     /**
      * Converts a number to a string using a specified number base
      * @param {number} value - the number to convert
-     * @param {number} [radix] - the number base; must be between 2 and 36. Defaults to 10
+     * @param {number} _radix - the number base; must be between 2 and 36. Defaults to 10
      * @returns {string} - the converted string
      */
     @JvmStatic
@@ -1872,8 +1872,8 @@ object Functions {
 
     /**
      *
-     * @param {string} [message] - the message to attach to the error
-     * @throws custom error with code 'D3137'
+     * @param {string} message - the message to attach to the error
+     * @throws error with code 'D3137'
      */
     @Throws(Throwable::class)
     @JvmStatic
@@ -1887,8 +1887,8 @@ object Functions {
     /**
      *
      * @param {boolean} condition - the condition to evaluate
-     * @param {string} [message] - the message to attach to the error
-     * @throws custom error with code 'D3137'
+     * @param {string} message - the message to attach to the error
+     * @throws error with code 'D3137'
      * @returns {undefined}
      */
     @Throws(Throwable::class)
@@ -2273,7 +2273,7 @@ object Functions {
     // Adapted from: org.apache.commons.lang3.StringUtils
     @JvmStatic
     fun isNumeric(cs: CharSequence?): Boolean {
-        if (cs == null || cs.isEmpty()) {
+        if (cs.isNullOrEmpty()) {
             return false
         }
         val sz = cs.length

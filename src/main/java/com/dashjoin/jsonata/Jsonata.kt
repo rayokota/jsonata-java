@@ -2178,10 +2178,6 @@ class Jsonata {
      * Checks whether input validation is active
      */
     /**
-     * Enable or disable input validation
-     * @param validateInput
-     */
-    /**
      * Flag: validate input objects to comply with JSON types
      */
     var isValidateInput: Boolean = true

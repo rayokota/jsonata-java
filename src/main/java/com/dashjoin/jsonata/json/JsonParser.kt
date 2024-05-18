@@ -57,9 +57,6 @@ class JsonParser(handler: JsonHandler<*, *>?) {
     /**
      * Creates a new JsonParser with the given handler. The parser will report all parser events to
      * this handler.
-     *
-     * @param handler
-     * the handler to process parser events
      */
     init {
         if (handler == null) {
@@ -92,24 +89,6 @@ class JsonParser(handler: JsonHandler<*, *>?) {
         }
     }
 
-    /**
-     * Reads the entire input from the given reader and parses it as JSON. The input must contain a
-     * valid JSON value, optionally padded with whitespace.
-     *
-     *
-     * Characters are read in chunks into an input buffer of the given size. Hence, wrapping a reader
-     * in an additional `BufferedReader` likely won't improve reading performance.
-     *
-     *
-     * @param reader
-     * the reader to read the input from
-     * @param buffersize
-     * the size of the input buffer in chars
-     * @throws IOException
-     * if an I/O error occurs in the reader
-     * @throws ParseException
-     * if the input is not valid JSON
-     */
     /**
      * Reads the entire input from the given reader and parses it as JSON. The input must contain a
      * valid JSON value, optionally padded with whitespace.

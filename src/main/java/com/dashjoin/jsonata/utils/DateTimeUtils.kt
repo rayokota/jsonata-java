@@ -1085,29 +1085,34 @@ object DateTimeUtils : Serializable {
             } else {
                 val regex = "[a-zA-Z]+"
                 val lookup: MutableMap<String, Int> = HashMap()
-                if (part.component == 'M' || part.component == 'x') {
-                    for (i in months.indices) {
-                        part.width?.second?.let {
-                            lookup[months[i].substring(0, it)] = i + 1
-                        } ?: run {
-                            lookup[months[i]] = i + 1
+                when (part.component) {
+                    'M', 'x' -> {
+                        for (i in months.indices) {
+                            part.width?.second?.let {
+                                lookup[months[i].substring(0, it)] = i + 1
+                            } ?: run {
+                                lookup[months[i]] = i + 1
+                            }
                         }
                     }
-                } else if (part.component == 'F') {
-                    for (i in 1 until days.size) {
-                        part.width?.second?.let {
-                            lookup[days[i].substring(0, it)] = i
-                        } ?: run {
-                            lookup[days[i]] = i
+                    'F' -> {
+                        for (i in 1 until days.size) {
+                            part.width?.second?.let {
+                                lookup[days[i].substring(0, it)] = i
+                            } ?: run {
+                                lookup[days[i]] = i
+                            }
                         }
                     }
-                } else if (part.component == 'P') {
-                    lookup["am"] = 0
-                    lookup["AM"] = 0
-                    lookup["pm"] = 1
-                    lookup["PM"] = 1
-                } else {
-                    throw RuntimeException(String.format(Constants.ERR_MSG_INVALID_NAME_MODIFIER, part.component))
+                    'P' -> {
+                        lookup["am"] = 0
+                        lookup["AM"] = 0
+                        lookup["pm"] = 1
+                        lookup["PM"] = 1
+                    }
+                    else -> {
+                        throw RuntimeException(String.format(Constants.ERR_MSG_INVALID_NAME_MODIFIER, part.component))
+                    }
                 }
                 res = object : MatcherPart(regex) {
                     override fun parse(value: String): Int {
