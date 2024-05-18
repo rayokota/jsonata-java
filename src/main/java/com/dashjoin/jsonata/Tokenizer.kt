@@ -33,11 +33,8 @@ class Tokenizer internal constructor(// Tokenizer (lexer) - invoked by the parse
     var length: Int = path.length // = path.length;
 
     class Token {
-        @JvmField
         var type: String? = null
-        @JvmField
         var value: Any? = null
-        @JvmField
         var position: Int = 0
 
         //
@@ -290,7 +287,6 @@ class Tokenizer internal constructor(// Tokenizer (lexer) - invoked by the parse
 
     companion object {
         // = function (path) {
-        @JvmField
         var operators: HashMap<String, Int> = object : HashMap<String, Int>() {
             init {
                 put(".", 75)

@@ -2542,7 +2542,6 @@ class Jsonata {
          * 20xx    - operators
          * 3xxx    - functions (blocks of 10 for each function)
          */
-        @JvmField
         var errorCodes: HashMap<String, String> = object : HashMap<String, String>() {
             init {
                 put("S0101", "String literal must be terminated by a matching quote")

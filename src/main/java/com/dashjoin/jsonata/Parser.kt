@@ -35,7 +35,6 @@ import java.util.stream.Collectors
 
 //var parseSignature = require('./signature');
 class Parser {
-    @JvmField
     var dbg: Boolean = false
 
     // This parser implements the 'Top down operator precedence' algorithm developed by Vaughan R Pratt; http://dl.acm.org/citation.cfm?id=512931.
@@ -72,115 +71,75 @@ class Parser {
     open inner class Symbol : Cloneable {
         //Symbol s;
         var id: String? = null
-        @JvmField
         var type: String? = null
-        @JvmField
         var value: Any? = null
         var bp: Int = 0
         var lbp: Int = 0
 
-        @JvmField
         var position: Int = 0
 
-        @JvmField
         var keepArray: Boolean = false // [
 
-        @JvmField
         var descending: Boolean = false // ^
-        @JvmField
         var expression: Symbol? = null // ^
         var seekingParent: MutableList<Symbol>? = null
-        @JvmField
         var errors: List<Exception>? = null
 
-        @JvmField
         var steps: MutableList<Symbol>? = null
-        @JvmField
         var slot: Symbol? = null
         var nextFunction: Symbol? = null
-        @JvmField
         var keepSingletonArray: Boolean = false
-        @JvmField
         var consarray: Boolean = false
         var level: Int = 0
-        @JvmField
         var focus: Any? = null
-        @JvmField
         var token: Any? = null
-        @JvmField
         var thunk: Boolean = false
 
         // Procedure:
-        @JvmField
         var procedure: Symbol? = null
-        @JvmField
         var arguments: MutableList<Symbol>? = null
-        @JvmField
         var body: Symbol? = null
-        @JvmField
         var predicate: MutableList<Symbol>? = null
-        @JvmField
         var stages: MutableList<Symbol>? = null
-        @JvmField
         var input: Any? = null
-        @JvmField
         var environment: Jsonata.Frame? = null
-        @JvmField
         var tuple: Any? = null
-        @JvmField
         var expr: Any? = null
-        @JvmField
         var group: Symbol? = null
         var name: Any? = null
 
         // Infix attributes
-        @JvmField
         var lhs: Symbol? = null
-        @JvmField
         var rhs: Symbol? = null
 
         // where rhs = list of Symbol pairs
-        @JvmField
         var lhsObject: List<Array<Symbol>>? = null
         var rhsObject: List<Array<Symbol>>? = null
 
         // where rhs = list of Symbols
         var rhsTerms: List<Symbol>? = null
-        @JvmField
         var terms: List<Symbol>? = null
 
         // Ternary operator:
-        @JvmField
         var condition: Symbol? = null
-        @JvmField
         var then: Symbol? = null
-        @JvmField
         var _else: Symbol? = null
 
-        @JvmField
         var expressions: MutableList<Symbol>? = null
 
         // processAST error handling
         var error: JException? = null
-        @JvmField
         var signature: Any? = null
 
         // Prefix attributes
-        @JvmField
         var pattern: Symbol? = null
-        @JvmField
         var update: Symbol? = null
-        @JvmField
         var delete: Symbol? = null
 
         // Ancestor attributes
-        @JvmField
         var label: String? = null
-        @JvmField
         var index: Any? = null
-        @JvmField
         var _jsonata_lambda: Boolean = false
-        @JvmField
         var ancestor: Symbol? = null
 
 

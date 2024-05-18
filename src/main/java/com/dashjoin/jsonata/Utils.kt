@@ -188,19 +188,14 @@ object Utils {
         constructor(c: Collection<E>?) : super(c)
 
         // Jsonata specific flags
-        @JvmField
         var sequence: Boolean = false
 
-        @JvmField
         var outerWrapper: Boolean = false
 
-        @JvmField
         var tupleStream: Boolean = false
 
-        @JvmField
         var keepSingleton: Boolean = false
 
-        @JvmField
         var cons: Boolean = false
     }
 
