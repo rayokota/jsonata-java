@@ -352,7 +352,7 @@ object DateTimeUtils : Serializable {
                 formattedInteger = "" + value
                 val padLength = format.mandatoryDigits - formattedInteger.length
                 if (padLength > 0) {
-                    formattedInteger = Functions.leftPad(formattedInteger, format.mandatoryDigits, "0")
+                    formattedInteger = Functions.leftPad(formattedInteger, format.mandatoryDigits, "0")!!
                 }
                 if (format.zeroCode != 0x30) {
                     val chars = formattedInteger.toCharArray()
