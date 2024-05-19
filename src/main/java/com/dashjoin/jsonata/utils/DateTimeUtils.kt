@@ -566,7 +566,7 @@ object DateTimeUtils : Serializable {
             }
         }
 
-        val indexes = separators.stream().map { seperator: GroupingSeparator? -> seperator!!.position }
+        val indexes = separators.stream().map { separator: GroupingSeparator? -> separator!!.position }
             .collect(Collectors.toList())
         val factor = indexes.stream()
             .reduce { a: Int, b: Int -> BigInteger.valueOf(a.toLong()).gcd(BigInteger.valueOf(b.toLong())).toInt() }
