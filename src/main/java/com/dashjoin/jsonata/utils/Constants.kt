@@ -57,7 +57,7 @@ object Constants {
      * pattern-separator %char; ";"
     </pre> *
      *
-     * http://www.w3.org/TR/xslt#format-number} to explain format-number in XSLT
+     * {http://www.w3.org/TR/xslt#format-number} to explain format-number in XSLT
      * Specification xsl.usage advanced
      */
     const val SYMBOL_DECIMAL_SEPARATOR: String = "decimal-separator"
